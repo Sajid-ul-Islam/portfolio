@@ -9,7 +9,7 @@ function glitchEffect(el) {
     if (!el) return;
     const originalText = el.getAttribute('data-original') || el.innerText;
     if (!el.getAttribute('data-original')) el.setAttribute('data-original', originalText);
-    
+
     let iterations = 0;
     const interval = setInterval(() => {
         el.innerText = originalText.split('').map((char, index) => {
@@ -38,11 +38,11 @@ function updateThemeIcon(theme) {
 const AudioEngine = {
     beep: () => { /* existing beep */ },
     play: (id) => { /* existing logic */ },
-    
+
     // MISSION_AUDIO: Dark-Ambient Synthwave
     track: new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'),
     isPlaying: false,
-    toggleMusic: function() {
+    toggleMusic: function () {
         const btn = document.getElementById('musicToggle');
         const label = document.getElementById('trackName');
         if (this.isPlaying) {
@@ -61,7 +61,7 @@ const AudioEngine = {
     },
 
     // NEURAL_VOICE: AI Oracle TTS
-    speak: function(text) {
+    speak: function (text) {
         if (!window.speechSynthesis) return;
         const msg = new SpeechSynthesisUtterance(text);
         const voices = window.speechSynthesis.getVoices();
@@ -113,25 +113,25 @@ function copyEmail(email, event) {
 // BACKGROUND MOCK TELEMETRY (Fills Blank Screen Space)
 function initTelemetryOverlay() {
     const overlay = document.createElement('div');
-    overlay.className = 'telemetry-overlay d-none d-xl-flex'; 
-    
+    overlay.className = 'telemetry-overlay d-none d-xl-flex';
+
     const colLeft = document.createElement('div');
     colLeft.className = 'telemetry-column left-col';
     const colRight = document.createElement('div');
     colRight.className = 'telemetry-column right-col text-end';
-    
+
     overlay.appendChild(colLeft);
     overlay.appendChild(colRight);
     document.body.appendChild(overlay);
 
-    const generateHex = () => Array.from({length: 4}, () => Math.random().toString(16).substr(2, 4).toUpperCase()).join(' ');
-    const generateBin = () => Array.from({length: 4}, () => Math.random() > 0.5 ? '1011' : '0100').join(' ');
+    const generateHex = () => Array.from({ length: 4 }, () => Math.random().toString(16).substr(2, 4).toUpperCase()).join(' ');
+    const generateBin = () => Array.from({ length: 4 }, () => Math.random() > 0.5 ? '1011' : '0100').join(' ');
 
     setInterval(() => {
         let leftText = '';
         let rightText = '';
-        for(let i=0; i<35; i++) {
-            leftText += `[SYS_${Math.floor(Math.random()*99)}] 0x${generateHex()}<br>`;
+        for (let i = 0; i < 35; i++) {
+            leftText += `[SYS_${Math.floor(Math.random() * 99)}] 0x${generateHex()}<br>`;
             rightText += `MEM_${generateBin()}<br>`;
         }
         colLeft.innerHTML = leftText;
@@ -144,12 +144,12 @@ function initTelemetryOverlay() {
 const SkillsGlobe = {
     canvas: null, ctx: null, tags: [],
     radius: 140, angleX: 0, angleY: 0,
-    init: function() {
+    init: function () {
         this.canvas = document.getElementById('skillCanvas');
         if (!this.canvas) return;
         this.ctx = this.canvas.getContext('2d');
         const skillList = ["PYTHON", "SQL", "POWER_BI", "TABLEAU", "MACHINE_LEARNING", "NLP", "DEEP_LEARNING", "BUSINESS_OPS", "CHURN_ANALYSIS", "STREAMLIT", "EXCEL", "PANDAS", "DASHBOARDING", "DATA_OPS", "SCRUTINY", "VIZ"];
-        
+
         this.tags = skillList.map((text, i) => {
             const phi = Math.acos(-1 + (2 * i) / skillList.length);
             const theta = Math.sqrt(skillList.length * Math.PI) * phi;
@@ -172,7 +172,7 @@ const SkillsGlobe = {
 
         this.animate();
     },
-    animate: function() {
+    animate: function () {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.angleX += 0.003;
         this.angleY += 0.003;
@@ -192,7 +192,7 @@ const SkillsGlobe = {
             const y2 = y1 * scale + this.canvas.height / 2;
 
             if (scale > 0) {
-                projectedPoints.push({x: x2, y: y2});
+                projectedPoints.push({ x: x2, y: y2 });
                 const alpha = (scale - 0.5) / 1.5;
                 this.ctx.fillStyle = `rgba(34, 197, 94, ${alpha})`;
                 this.ctx.font = `${10 * scale}px "JetBrains Mono"`;
@@ -203,8 +203,8 @@ const SkillsGlobe = {
 
         // Neural Network Connection Lines
         this.ctx.beginPath();
-        for(let i=0; i<projectedPoints.length; i++) {
-            for(let j=i+1; j<projectedPoints.length; j++) {
+        for (let i = 0; i < projectedPoints.length; i++) {
+            for (let j = i + 1; j < projectedPoints.length; j++) {
                 const dist = Math.hypot(projectedPoints[i].x - projectedPoints[j].x, projectedPoints[i].y - projectedPoints[j].y);
                 if (dist < 60) { // Connect nodes if they are close
                     this.ctx.moveTo(projectedPoints[i].x, projectedPoints[i].y);
@@ -224,11 +224,11 @@ window.replayProject = (projectId) => {
     const term = document.getElementById('bottomTerminal');
     const output = document.getElementById('bottom-terminal-output');
     if (!term || !output) return;
-    
+
     term.classList.add('active');
     switchTerminalTab('terminal');
     output.innerHTML = '';
-    
+
     const logs = [
         `[REPLAY_INIT]: ${projectId}`,
         `> fetching remote_origin... SUCCESS`,
@@ -254,7 +254,7 @@ window.addEventListener('DOMContentLoaded', () => {
     updateSystemHealth();
     SkillsGlobe.init();
     initTelemetryOverlay();
-    
+
     const musicBtn = document.getElementById('musicToggle');
     if (musicBtn) musicBtn.addEventListener('click', () => AudioEngine.toggleMusic());
 
@@ -281,7 +281,7 @@ window.addEventListener('DOMContentLoaded', () => {
     // --- Glitch Effect Initializer ---
     document.querySelectorAll('.section-label, h2:not(.display-2)').forEach(el => {
         el.addEventListener('mouseenter', () => glitchEffect(el));
-        setTimeout(() => glitchEffect(el), 500); 
+        setTimeout(() => glitchEffect(el), 500);
     });
 
     // --- Initial Sync ---
@@ -293,6 +293,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('skillsChart');
     const skillMap = { 'PYTHON': 0, 'SQL': 1, 'POWER_BI': 2, 'TABLEAU': 2, 'EXCEL': 1, 'PYTHON_ML': 3, 'ML': 3, 'REACT': 4, 'NODE.JS': 4, 'GOOGLE_ANALYTICS': 5 }; // Map pills to indices
     const baseData = [90, 85, 95, 70, 75, 80];
+    window.chartBaseData = [...baseData]; // Setup global baseline
 
     if (canvas && typeof Chart !== 'undefined') {
         const ctx = canvas.getContext('2d');
@@ -310,7 +311,17 @@ window.addEventListener('DOMContentLoaded', () => {
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 animation: { duration: 400 },
+                // Backward compatibility for Chart.js v2
+                scale: {
+                    angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                    gridLines: { color: 'rgba(255, 255, 255, 0.1)' },
+                    pointLabels: { fontColor: '#94a3b8', fontFamily: 'JetBrains Mono' },
+                    ticks: { display: false, min: 0, max: 100 }
+                },
+                // Compatibility for Chart.js v3+
                 scales: {
                     r: {
                         angleLines: { color: 'rgba(255, 255, 255, 0.1)' },
@@ -323,29 +334,41 @@ window.addEventListener('DOMContentLoaded', () => {
                 },
                 plugins: {
                     legend: { display: false }
-                }
+                },
+                legend: { display: false } // Legacy v2 config
             }
         });
 
-        // Gamify connections
-        // Gamify connections
-        document.querySelectorAll('.skill-pill-tactical').forEach(badge => {
-            badge.style.cursor = 'pointer';
-            badge.addEventListener('mouseenter', () => {
+        // Gamify connections using Event Delegation (fixes missing async DOM elements)
+        document.addEventListener('mouseover', (e) => {
+            const badge = e.target.closest('.skill-pill-tactical, .tech-chip');
+            if (badge && window.skillsRadarChart) {
+                badge.style.cursor = 'pointer';
                 const skill = badge.textContent.trim().toUpperCase();
-                const index = skillMap[skill];
-                if (index !== undefined) {
-                    const newData = baseData.map((v, i) => i === index ? 100 : v * 0.4); // Highlight effect
+                let index = skillMap[skill];
+
+                if (index === undefined) {
+                    const labels = window.skillsRadarChart.data.labels.map(l => l.toUpperCase());
+                    index = labels.indexOf(skill);
+                }
+
+                if (index !== undefined && index !== -1) {
+                    const currentData = window.chartBaseData || baseData;
+                    const newData = currentData.map((v, i) => i === index ? 100 : v * 0.4);
                     window.skillsRadarChart.data.datasets[0].data = newData;
                     window.skillsRadarChart.update('none');
                     badge.classList.add('pulse');
                 }
-            });
-            badge.addEventListener('mouseleave', () => {
-                window.skillsRadarChart.data.datasets[0].data = [...baseData];
-                window.skillsRadarChart.update();
+            }
+        });
+
+        document.addEventListener('mouseout', (e) => {
+            const badge = e.target.closest('.skill-pill-tactical, .tech-chip');
+            if (badge && window.skillsRadarChart) {
+                window.skillsRadarChart.data.datasets[0].data = [...(window.chartBaseData || baseData)];
+                window.skillsRadarChart.update('none');
                 badge.classList.remove('pulse');
-            });
+            }
         });
     }
 });

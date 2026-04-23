@@ -290,6 +290,7 @@ function renderSkillGroups(groups) {
     if (window.skillsRadarChart && chartLabels.length > 0) {
         window.skillsRadarChart.data.labels = chartLabels;
         window.skillsRadarChart.data.datasets[0].data = chartValues;
+        window.chartBaseData = [...chartValues]; // Retain dynamic baseline for hover effects
         window.skillsRadarChart.update();
     }
 }
