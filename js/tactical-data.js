@@ -32,7 +32,7 @@ class Typewriter {
         this.index = 0;
         this.el.innerHTML = '';
         this.el.classList.add('typewriter-cursor');
-        
+
         const sessionID = Math.random().toString(36).substr(2, 9);
         this.el.setAttribute('data-session', sessionID);
         this.sessionID = sessionID;
@@ -53,13 +53,13 @@ class Typewriter {
 function runTypewriter(info) {
     const tH1 = document.getElementById('typewriter-h1');
     const tP = document.getElementById('typewriter-p');
-    
+
     if (tH1) {
         tH1.parentElement.style.opacity = '1';
         const h1Text = `Hi, I'm ${info.Name.split(' ')[0]} 👋`;
         new Typewriter(tH1, h1Text, 120).type();
     }
-    
+
     if (tP) {
         const pText = info.HeroText || "Analyzing data for strategic growth.";
         setTimeout(() => {
@@ -101,7 +101,7 @@ async function initializeTacticalData() {
     console.log('[SYNC] Connecting to Intel Grid...');
 
     runTypewriter(DEFAULT_INFO);
-    
+
     const [infoData, experience, education, skills, projects, awards] = await Promise.all([
         fetchSheetData(SHEETS.INFO),
         fetchSheetData(SHEETS.EXPERIENCE),
@@ -123,7 +123,7 @@ async function initializeTacticalData() {
 
     if (finalExperience.length > 0) renderExperience(finalExperience);
     if (education.length > 0) renderEducation(education);
-    
+
     if (finalSkills.length > 0) {
         if (window.DATA && window.DATA.skillGroups) renderSkillGroups(window.DATA.skillGroups);
         else renderSkills(finalSkills);
@@ -155,7 +155,7 @@ async function initializeTacticalData() {
         if (window.DATA.favoriteMedia) renderMedia(window.DATA.favoriteMedia);
         if (window.DATA.fileTreeData) renderFileTree(window.DATA.fileTreeData);
     }
-    
+
     if (window.TACTICAL_INFO && window.TACTICAL_INFO.Github) fetchGithubRepos(window.TACTICAL_INFO.Github.split('/').pop());
     else fetchGithubRepos('saajiidi');
 
@@ -173,11 +173,11 @@ function renderInfo(info) {
     document.querySelectorAll('.data-name').forEach(el => el.innerText = info.Name);
     document.querySelectorAll('.data-role').forEach(el => el.innerText = info.Role);
     window.TACTICAL_INFO = info;
-    
+
     if (info.Github) document.querySelectorAll('[title="GitHub"]').forEach(a => a.href = info.Github);
     if (info.LinkedIn) document.querySelectorAll('[title="LinkedIn"]').forEach(a => a.href = info.LinkedIn);
     if (info.Kaggle) document.querySelectorAll('[title="Kaggle"]').forEach(a => a.href = info.Kaggle);
-    
+
     const waSpan = document.getElementById('contact-details');
     if (waSpan && info.Whatsapp && info.Email) {
         waSpan.innerHTML = `
@@ -262,7 +262,7 @@ function renderSkillGroups(groups) {
     const pbContainer = document.getElementById('skill-progress-bars');
     const chartLabels = [];
     const chartValues = [];
-    
+
     const iconMap = {
         'PYTHON': 'fab fa-python', 'SQL': 'fas fa-database', 'POWER BI': 'fas fa-chart-bar',
         'TABLEAU': 'fas fa-chart-pie', 'REACT': 'fab fa-react', 'JAVASCRIPT': 'fab fa-js',
@@ -333,7 +333,7 @@ function renderProjects(data) {
                 </div>
                 ${caseStudyHtml}
                 <div class="d-flex gap-2 mt-auto">
-                    <a href="${item.liveUrl || '#'}" onclick="openPortfolioBridge(event, '${item.liveUrl}')" class="btn btn-sm btn-primary">UPLINK</a>
+                    <a href="${item.liveUrl || '#'}" onclick="openPortfolioBridge(event, '${item.id}')" class="btn btn-sm btn-primary">UPLINK</a>
                     <button class="btn btn-sm btn-outline-primary ms-auto" onclick="decryptDossier('${item.id}', this, true)"><i class="fas fa-sync-alt"></i></button>
                 </div>
               </div>
@@ -409,7 +409,7 @@ function renderGaming(data) {
 function renderMedia(data) {
     const container = document.getElementById('media-list') || document.getElementById('favorites-list');
     if (!container || !data) return;
-    
+
     try {
         container.innerHTML = data.map(item => `
             <div class="media-card card-glass p-3 mb-3">
@@ -469,23 +469,165 @@ async function sendAIMessage() {
     const body = document.getElementById('aiChatBody');
     body.insertAdjacentHTML('beforeend', `<div class="ai-message user">${msg}</div>`);
     input.value = '';
-    
-    // AI Navigation Command Logic
-    if (msg.toLowerCase().includes('projects')) {
-        document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
-        body.insertAdjacentHTML('beforeend', `<div class="ai-message bot">Navigation complete. Project blueprints loaded.</div>`);
-    } else if (msg.toLowerCase().includes('skills')) {
-        document.getElementById('skills').scrollIntoView({ behavior: 'smooth' });
-        body.insertAdjacentHTML('beforeend', `<div class="ai-message bot">Grid initialized. Skill nodes active.</div>`);
-    } else {
-        body.insertAdjacentHTML('beforeend', `<div class="ai-message bot">Acknowledged. Tactical link established.</div>`);
-    }
+
+    // Simulated ML/NLP Processing State
+    const loadingId = 'loading-' + Date.now();
+    body.insertAdjacentHTML('beforeend', `<div class="ai-message system loading" id="${loadingId}">[NLP_PIPELINE] Tokenizing & extracting intents...</div>`);
     body.scrollTop = body.scrollHeight;
+
+    setTimeout(() => {
+        const loadingEl = document.getElementById(loadingId);
+        if (loadingEl) loadingEl.remove();
+
+        const nlpResult = processNLP(msg);
+
+        let responseHtml = `<div class="ai-message bot">`;
+        responseHtml += `<div class="text-secondary" style="font-size: 0.55rem; margin-bottom: 6px; border-bottom: 1px solid rgba(34,197,94,0.2); padding-bottom: 4px;">INTENT: ${nlpResult.intent.toUpperCase()} | CONFIDENCE: ${(nlpResult.confidence * 100).toFixed(1)}%</div>`;
+        responseHtml += nlpResult.response;
+        responseHtml += `</div>`;
+
+        body.insertAdjacentHTML('beforeend', responseHtml);
+
+        if (nlpResult.action) {
+            setTimeout(nlpResult.action, 800);
+        }
+        body.scrollTop = body.scrollHeight;
+        if (typeof AudioEngine !== 'undefined') AudioEngine.play('beep');
+    }, 1200 + Math.random() * 800); // Simulate dynamic RAG retrieval time
 }
 
-function toggleTreeSection(id) { 
+function processNLP(text) {
+    const normalized = text.toLowerCase().replace(/[^\w\s]/gi, '');
+    const words = normalized.split(' ');
+
+    // 1. INTENT CLASSIFICATION (Bag of Words TF-IDF Simulation)
+    const intentModels = {
+        greeting: ['hi', 'hello', 'hey', 'greetings', 'morning', 'evening'],
+        projects: ['project', 'portfolio', 'work', 'build', 'made', 'app', 'dashboard', 'repository'],
+        skills: ['skill', 'tech', 'stack', 'tool', 'language', 'know', 'learn', 'python', 'react', 'sql'],
+        experience: ['experience', 'job', 'work', 'career', 'role', 'history', 'company', 'employed'],
+        contact: ['contact', 'email', 'hire', 'reach', 'message', 'call', 'whatsapp'],
+        whoami: ['who', 'about', 'profile', 'background', 'sajid']
+    };
+
+    let bestIntent = 'unknown';
+    let maxScore = 0;
+
+    for (const [intent, keywords] of Object.entries(intentModels)) {
+        let score = 0;
+        keywords.forEach(kw => { if (words.includes(kw)) score += 1.5; else if (normalized.includes(kw)) score += 0.5; });
+        if (score > maxScore) { maxScore = score; bestIntent = intent; }
+    }
+
+    // 2. NAMED ENTITY RECOGNITION (NER) - Match against actual DATA
+    let extractedProject = null;
+    if (window.DATA && window.DATA.projects) {
+        extractedProject = window.DATA.projects.find(p => {
+            const titleWords = p.title.toLowerCase().split(' ');
+            return titleWords.some(tw => tw.length > 3 && words.includes(tw));
+        });
+    }
+
+    let response = "I couldn't extract a clear tactical intent. Try asking about 'projects', 'skills', or 'experience'.";
+    let action = null;
+    let confidence = maxScore > 0 ? Math.min(0.4 + (maxScore * 0.18), 0.99) : 0.12;
+
+    // 3. GENERATIVE RESPONSE ROUTING
+    if (extractedProject) {
+        bestIntent = 'specific_project';
+        confidence = 0.96;
+        response = `Vector DB match found: <strong>${extractedProject.title}</strong>.<br><br>${extractedProject.description}<br><br><button class="btn btn-sm btn-outline-primary mt-2" onclick="openPortfolioBridge(event, '${extractedProject.id}')">OPEN DOSSIER</button>`;
+    } else {
+        switch (bestIntent) {
+            case 'greeting':
+                response = "Greetings, Operative. How can I assist with your situational awareness of Sajid's portfolio today?";
+                break;
+            case 'projects':
+                response = "Accessing project nodes. Sajid has built extensive BI dashboards and automation tools. Highlighting the grid now.";
+                action = () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
+                break;
+            case 'skills':
+                response = "Querying tech stack matrices. Primary proficiencies include Python, Machine Learning, and Data Ops. Routing you to the radar chart.";
+                action = () => document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
+                break;
+            case 'experience':
+                response = "Retrieving career logs. Notable experience includes strategic operations at Daraz and DEEN Commerce. Scrolling timeline...";
+                action = () => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
+                break;
+            case 'contact':
+                response = "Initializing secure comms channel. You can reach out via encrypted email or direct Signal (WhatsApp).";
+                action = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                break;
+            case 'whoami':
+                response = "Sajid Islam is a Data Scientist & Business Analyst specializing in turning complex datasets into strategic growth. Based in Dhaka, Bangladesh.";
+                break;
+        }
+    }
+    return { intent: bestIntent, response, action, confidence };
+}
+
+// PORTFOLIO BRIDGE (Project Deep Dives HUD)
+window.openPortfolioBridge = function (e, projectId) {
+    e.preventDefault();
+    const project = (window.DATA && window.DATA.projects) ? window.DATA.projects.find(p => p.id === projectId) : null;
+    if (!project) return;
+
+    let overlay = document.getElementById('portfolioBridgeOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'portfolioBridgeOverlay';
+        overlay.className = 'portfolio-bridge-overlay';
+        document.body.appendChild(overlay);
+    }
+
+    const caseStudy = project.caseStudy || {};
+    const impacts = caseStudy.impact ? caseStudy.impact.map(i => `<li>${i}</li>`).join('') : '<li>Metrics still compiling...</li>';
+    const tech = project.technologies ? project.technologies.map(t => `<span class="tag-tactical">#${t}</span>`).join('') : '';
+
+    overlay.innerHTML = `
+        <div class="bridge-backdrop" onclick="closePortfolioBridge()"></div>
+        <div class="bridge-window">
+            <div class="bridge-header">
+                <div class="d-flex align-items-center gap-2"><div class="pulse-indicator"></div><span class="bridge-title">[CASE_STUDY: ${project.title}]</span></div>
+                <div class="d-flex align-items-center"><span class="telemetry-data d-none d-md-block">STATUS: DECRYPTED</span><button class="btn-bridge-ctrl btn-exit" onclick="closePortfolioBridge()">ABORT</button></div>
+            </div>
+            <div class="bridge-content p-4 overflow-auto" style="background: var(--bg-page) !important;">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2 class="text-primary mb-3">${project.title}</h2>
+                        <p class="lead text-secondary">${project.description}</p>
+                        <div class="mt-4 p-3 border border-secondary border-opacity-25 bg-dark bg-opacity-25">
+                            <h6 class="text-highlight">[MISSION_PROBLEM]</h6><p class="small">${caseStudy.problem || 'N/A'}</p>
+                            <h6 class="text-highlight mt-3">[TACTICAL_SOLUTION]</h6><p class="small">${caseStudy.solution || 'N/A'}</p>
+                            <h6 class="text-highlight mt-3">[IMPACT_METRICS]</h6><ul class="small text-secondary">${impacts}</ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 mt-4 mt-lg-0 border-start border-secondary border-opacity-25">
+                        <h6 class="text-primary mb-3">SYSTEM_SPECS</h6>
+                        <div class="d-flex flex-wrap gap-2 mb-4">${tech}</div>
+                        <div class="d-grid gap-3 mt-4">
+                            ${project.liveUrl ? `<a href="${project.liveUrl}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt me-2"></i> INITIATE_LIVE_UPLINK</a>` : ''}
+                            ${project.githubUrl ? `<a href="${project.githubUrl}" target="_blank" class="btn btn-outline-secondary"><i class="fab fa-github me-2"></i> VIEW_SOURCE_CODE</a>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    setTimeout(() => overlay.classList.add('active'), 10);
+};
+
+window.closePortfolioBridge = function () {
+    const overlay = document.getElementById('portfolioBridgeOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 400);
+    }
+}
+
+function toggleTreeSection(id) {
     const el = document.querySelector(`#tree-sec-${id} .file-tree-items`);
-    if(el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
 function toggleMobileSidebar() { document.getElementById('fileTreeSidebar').classList.toggle('open'); }

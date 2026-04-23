@@ -232,6 +232,30 @@ const DATA = {
       },
     },
     {
+      id: "tomyinfida",
+      title: "ToMyInfida",
+      description: "A beautiful, interactive love letter creator with password protection, scheduled unlocking, and customizable themes.",
+      image: "/img/projects/tomyinfida.png",
+      liveUrl: "https://letter2dear.surge.sh/",
+      featured: true,
+      technologies: ["HTML", "CSS", "JavaScript", "Romantic Design"],
+      category: "web-apps",
+      caseStudy: {
+        role: "Developer & Designer",
+        timeline: "2024",
+        problem: "Digital messages often lack the sentiment and surprise of a hand-written letter.",
+        solution: "Built a themed, interactive letter platform with security and timed-release features.",
+        impact: [
+          "Enhanced digital intimacy through thoughtful UI.",
+          "Implemented password-protected private letter delivery.",
+        ],
+        metrics: [
+          { label: "Design", value: "Premium/Romantic" },
+          { label: "Features", value: "Timed/Protected" },
+        ],
+      },
+    },
+    {
       id: "churn-analysis",
       title: "Customer Churn Analysis",
       description: "Predictive modeling using Python to identify at-risk customers. Implementation of Random Forest and XGBoost with 85%+ accuracy.",
@@ -442,12 +466,12 @@ const DATA = {
       }
   ],
   learningItems: [
-    { name: "Agentic AI Systems", category: "AI", progress: 78 },
-    { name: "RAG Architecture", category: "AI", progress: 72 },
-    { name: "Machine Learning Engineering", category: "ML", progress: 80 },
-    { name: "Advanced Generative AI", category: "ML", progress: 85 },
-    { name: "Cloud Data Warehousing", category: "Data Ops", progress: 60 },
-    { name: "Executive Strategic Leadership", category: "BI", progress: 75 }
+    { name: "Agentic Workflows (LangGraph/CrewAI)", category: "AI", progress: 82 },
+    { name: "Advanced RAG & Vector DBs", category: "AI", progress: 85 },
+    { name: "LLM Fine-Tuning (LoRA/QLoRA)", category: "ML", progress: 65 },
+    { name: "Modern Data Stack (dbt & Snowflake)", category: "Data Ops", progress: 70 },
+    { name: "Real-Time Streaming Analytics", category: "BI", progress: 60 },
+    { name: "MLOps & Model Deployment", category: "ML", progress: 75 }
   ],
   gaming: {
     stats: [
@@ -720,3 +744,5 @@ const DATA = {
   ]
 };
 
+// Attach to global window object so tactical-data.js can read it
+window.DATA = DATA;

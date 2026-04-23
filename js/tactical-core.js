@@ -110,6 +110,35 @@ function copyEmail(email, event) {
     setTimeout(() => { btn.innerText = originalText; }, 2000);
 }
 
+// BACKGROUND MOCK TELEMETRY (Fills Blank Screen Space)
+function initTelemetryOverlay() {
+    const overlay = document.createElement('div');
+    overlay.className = 'telemetry-overlay d-none d-xl-flex'; 
+    
+    const colLeft = document.createElement('div');
+    colLeft.className = 'telemetry-column left-col';
+    const colRight = document.createElement('div');
+    colRight.className = 'telemetry-column right-col text-end';
+    
+    overlay.appendChild(colLeft);
+    overlay.appendChild(colRight);
+    document.body.appendChild(overlay);
+
+    const generateHex = () => Array.from({length: 4}, () => Math.random().toString(16).substr(2, 4).toUpperCase()).join(' ');
+    const generateBin = () => Array.from({length: 4}, () => Math.random() > 0.5 ? '1011' : '0100').join(' ');
+
+    setInterval(() => {
+        let leftText = '';
+        let rightText = '';
+        for(let i=0; i<35; i++) {
+            leftText += `[SYS_${Math.floor(Math.random()*99)}] 0x${generateHex()}<br>`;
+            rightText += `MEM_${generateBin()}<br>`;
+        }
+        colLeft.innerHTML = leftText;
+        colRight.innerHTML = rightText;
+    }, 2000);
+}
+
 // Initializer
 // 3D_SKILL_GLOBE_CORE
 const SkillsGlobe = {
@@ -148,6 +177,8 @@ const SkillsGlobe = {
         this.angleX += 0.003;
         this.angleY += 0.003;
 
+        const projectedPoints = [];
+
         this.tags.forEach(tag => {
             // Rotate around X
             let y1 = tag.y * Math.cos(this.angleX) - tag.z * Math.sin(this.angleX);
@@ -161,6 +192,7 @@ const SkillsGlobe = {
             const y2 = y1 * scale + this.canvas.height / 2;
 
             if (scale > 0) {
+                projectedPoints.push({x: x2, y: y2});
                 const alpha = (scale - 0.5) / 1.5;
                 this.ctx.fillStyle = `rgba(34, 197, 94, ${alpha})`;
                 this.ctx.font = `${10 * scale}px "JetBrains Mono"`;
@@ -168,6 +200,22 @@ const SkillsGlobe = {
                 this.ctx.fillText(tag.text, x2, y2);
             }
         });
+
+        // Neural Network Connection Lines
+        this.ctx.beginPath();
+        for(let i=0; i<projectedPoints.length; i++) {
+            for(let j=i+1; j<projectedPoints.length; j++) {
+                const dist = Math.hypot(projectedPoints[i].x - projectedPoints[j].x, projectedPoints[i].y - projectedPoints[j].y);
+                if (dist < 60) { // Connect nodes if they are close
+                    this.ctx.moveTo(projectedPoints[i].x, projectedPoints[i].y);
+                    this.ctx.lineTo(projectedPoints[j].x, projectedPoints[j].y);
+                }
+            }
+        }
+        this.ctx.strokeStyle = 'rgba(34, 197, 94, 0.15)';
+        this.ctx.lineWidth = 0.5;
+        this.ctx.stroke();
+
         requestAnimationFrame(() => this.animate());
     }
 };
@@ -205,6 +253,7 @@ window.replayProject = (projectId) => {
 window.addEventListener('DOMContentLoaded', () => {
     updateSystemHealth();
     SkillsGlobe.init();
+    initTelemetryOverlay();
     
     const musicBtn = document.getElementById('musicToggle');
     if (musicBtn) musicBtn.addEventListener('click', () => AudioEngine.toggleMusic());

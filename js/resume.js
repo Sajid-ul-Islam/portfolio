@@ -185,4 +185,39 @@ window.addEventListener('DOMContentLoaded', event => {
     });
   };
 
+  // Command Palette Shortcut (Ctrl+K)
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const palette = document.querySelector('.command-palette');
+      const input = document.getElementById('paletteInput');
+      if (palette) {
+        palette.classList.toggle('active');
+        if (palette.classList.contains('active') && input) {
+          input.focus();
+        }
+      }
+    }
+    // Escape to close command palette
+    if (e.key === 'Escape') {
+      const palette = document.querySelector('.command-palette');
+      if (palette && palette.classList.contains('active')) {
+        palette.classList.remove('active');
+      }
+    }
+  });
+
+  // Project Dossier Decryption Logic
+  document.querySelectorAll('.redaction-container').forEach(container => {
+    container.addEventListener('click', function() {
+      if (!this.classList.contains('decrypted')) {
+        this.classList.add('decrypting', 'scanning');
+        setTimeout(() => {
+          this.classList.remove('decrypting', 'scanning');
+          this.classList.add('decrypted');
+        }, 1500); // 1.5s simulated scan time
+      }
+    });
+  });
+
 });
