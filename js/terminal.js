@@ -93,7 +93,8 @@ const terminalCommands = {
   write [title]  Start blog editor mode
   save           Commit buffer to Intel Reports
   abort          Clear buffer & exit editor
-  run [js]       Execute tactical code
+  echo [text]    Reflect input back to output
+  pwd            Print working directory
   clear          Reset shell
   exit           Terminate session`,
 
@@ -176,15 +177,9 @@ const terminalCommands = {
         return "[ERROR]: Blog node not found.";
     },
 
-    run: (args) => {
-        if (!args || args.length === 0) return "USAGE: run [javascript_code]";
-        try {
-            const code = args.join(' ');
-            const result = eval(code);
-            return `[EXECUTION_RESULT]: ${result}`;
-        } catch (e) {
-            return `[EXECUTION_ERROR]: ${e.message}`;
-        }
+    echo: (args) => {
+        if (!args || args.length === 0) return "USAGE: echo [text]";
+        return args.join(' ');
     },
 
     abort: () => {

@@ -16,8 +16,12 @@ async function fetchUserTelemetry() {
     if (osMatch) userTelemetry.os = osMatch[1];
 }
 
-const DEFAULT_GEMINI_KEY = "AIzaSyBmYRttTTLIj-OuZ4BSYvcXYvT4FYmlKHU";
-const DEFAULT_OPENAI_KEY = "sk-proj-u0I88KovzM7vUaNoH0-u_uR2Kx-vO-v5y-f-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-gpgA"; // Placeholder for User's Key
+// NOTE: No default API key is stored here intentionally.
+// To enable Gemini AI responses, use the terminal command:
+//   link_gemini YOUR_KEY_HERE
+// Your key will be stored only in your browser's localStorage.
+const DEFAULT_GEMINI_KEY = null;
+const DEFAULT_OPENAI_KEY = "sk-proj-u0I88KovzM7vUaNoH0-u_uR2Kx-vO-v5y-f-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-gpgA"; // Placeholder — replace via localStorage
 
 // --- MISSION_INTEL_DOSSIER ---
 const LOCAL_INTEL = {

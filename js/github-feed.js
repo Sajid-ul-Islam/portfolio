@@ -4,7 +4,7 @@
  * Renders into #githubActivity with .activity-item elements
  */
 
-const GH_USER   = 'saajiidi';
+const GH_USER   = 'Sajid-ul-Islam';
 const GH_API    = `https://api.github.com/users/${GH_USER}/events/public`;
 
 const TYPE_MAP = {
@@ -19,8 +19,8 @@ const TYPE_MAP = {
 };
 
 const FALLBACK_EVENTS = [
-    { type: 'PushEvent',   repo: 'saajiidi.github.io',       branch: 'main',   msg: 'Fix portfolio bridge & restore feed',  sha: 'a3f1c28', ago: '8m ago'  },
-    { type: 'PushEvent',   repo: 'saajiidi.github.io',       branch: 'main',   msg: 'Add Agentic AI to learning track',     sha: 'b8e2d14', ago: '42m ago' },
+    { type: 'PushEvent',   repo: 'Sajid-ul-Islam.github.io',   branch: 'main',   msg: 'Fix portfolio bridge & restore feed',  sha: 'a3f1c28', ago: '8m ago'  },
+    { type: 'PushEvent',   repo: 'Sajid-ul-Islam.github.io',   branch: 'main',   msg: 'Add Agentic AI to learning track',     sha: 'b8e2d14', ago: '42m ago' },
     { type: 'CreateEvent', repo: 'agentic-ai-assistant',     branch: 'feature/rag', msg: '',                                sha: '',        ago: '2h ago'  },
     { type: 'PushEvent',   repo: 'agentic-ai-assistant',     branch: 'develop',msg: 'Bootstrap LangChain + VectorDB',       sha: 'c9a3f77', ago: '4h ago'  },
     { type: 'WatchEvent',  repo: 'langchain-ai/langchain',   branch: '',       msg: '',                                     sha: '',        ago: '8h ago'  },
@@ -127,7 +127,7 @@ async function initGitHubFeed() {
     // Live simulation: add new fake events every 30s
     setInterval(() => {
         const newEvents = [
-            { type: 'PushEvent',  repo: 'saajiidi.github.io', branch: 'main', msg: 'Minor fix',             sha: Math.random().toString(36).slice(2,9), ago: 'just now' },
+            { type: 'PushEvent',  repo: 'Sajid-ul-Islam.github.io', branch: 'main', msg: 'Minor fix',             sha: Math.random().toString(36).slice(2,9), ago: 'just now' },
             { type: 'WatchEvent', repo: 'openai/openai-python', branch: '', msg: '',                         sha: '',                                      ago: 'just now' },
             { type: 'PushEvent',  repo: 'e-com-dashboard',     branch: 'main', msg: 'Update dashboard data', sha: Math.random().toString(36).slice(2,9), ago: 'just now' }
         ];

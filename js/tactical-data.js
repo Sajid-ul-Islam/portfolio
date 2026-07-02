@@ -193,7 +193,7 @@ async function initializeTacticalData() {
     }
 
     if (window.TACTICAL_INFO && window.TACTICAL_INFO.Github) fetchGithubRepos(window.TACTICAL_INFO.Github.split('/').pop());
-    else fetchGithubRepos('saajiidi');
+    else fetchGithubRepos('Sajid-ul-Islam');
 
     initAIChat();
 

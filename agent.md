@@ -40,7 +40,6 @@ Portfolio_Terminal/
 │   ├── file-tree.css         # VS Code-style file explorer
 │   ├── floating-widgets.css  # HUD widget styling
 │   ├── github-feed.css       # GitHub integration styles
-│   ├── resume.css            # Resume page styles
 │   └── deep-black-terminal.css # Terminal-specific styling
 │
 ├── js/                       # JavaScript modules (tactical architecture)
@@ -57,18 +56,13 @@ Portfolio_Terminal/
 │   ├── github-feed.js        # GitHub repo fetching
 │   ├── floating-widgets.js   # Floating HUD widgets
 │   ├── pwa-loader.js         # Service Worker registration
-│   ├── resume.js             # Resume page logic
 │   └── debug-widgets.js      # Development debugging tools
 │
-├── vendor/                   # Third-party libraries
-│   ├── bootstrap/            # Bootstrap 5.3.0
-│   ├── fontawesome/          # Font Awesome 6.4.0
-│   └── jquery/               # jQuery 3.7.1
+│   Note: Bootstrap 5.3, Font Awesome 6.4 & jQuery are loaded via CDN.
 │
 ├── img/                      # Portfolio images & assets
 ├── scripts/                  # Python utility scripts
 ├── scss/                     # SASS source files
-├── archive/                  # Legacy/backup files
 └── .github/                  # GitHub Actions/workflows
 ```
 
@@ -148,11 +142,22 @@ const DATA = {
   - Contact integration (`contact`, `email`)
   - Easter eggs (`matrix`, `party`)
 
-**Available Commands:**
+**Available Commands (actual implementation in `terminal.js`):**
 ```
-help, clear, date, whoami, social, contact
-projects, skills, flush, reload, reboot
-matrix, party, weather, joke, quote
+help           Show this command directory
+neofetch       System summary & specs
+ls [-a]        List project archive nodes
+cat [id]       Display project dossier by ID
+whoami         Operative identification
+status         System diagnostics
+clearance      Elevate security clearance display
+write [title]  Start blog editor mode
+save           Commit buffer to Intel Reports
+abort          Clear buffer & exit editor mode
+echo [text]    Reflect input back to output
+pwd            Print working directory
+clear          Reset shell
+exit           Terminate session (close terminal)
 ```
 
 ### 5.2 HUD Widgets (`js/tactical-widgets.js`, `js/widgets.js`)
@@ -281,11 +286,11 @@ Edit `js/data.js` → `DATA.learningItems`:
 ```
 
 ### Adding New Terminal Commands
-Edit `js/terminal.js` → `TERMINAL_COMMANDS` object:
+Edit `js/terminal.js` → `terminalCommands` object:
 ```javascript
-newcommand: {
-  description: "What it does",
-  action: () => { /* implementation */ }
+// Add a new entry to the terminalCommands object:
+mycommand: (args) => {
+    return `Output: ${args.join(' ')}`;
 }
 ```
 

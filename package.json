@@ -1,35 +1,27 @@
 {
-    "title": "Resume",
-    "name": "startbootstrap-resume",
-    "version": "5.0.7",
+    "title": "Sajid Islam Portfolio",
+    "name": "sajid-islam-portfolio",
+    "version": "1.0.0",
     "scripts": {
         "start": "node_modules/.bin/gulp watch",
         "build": "gulp",
         "bundle": "gulp bundle",
         "build:prod": "gulp build && gulp bundle"
     },
-    "description": "Resume is a simple, yet elegant resume and CV theme for Bootstrap 4.",
+    "description": "High-performance personal portfolio for Sajid Islam, Data Scientist & Business Analyst. Features a Tactical HUD aesthetic, interactive terminal, PWA support, and AI-powered chatbot.",
     "keywords": [
-        "css",
-        "sass",
-        "html",
-        "responsive",
-        "theme",
-        "template"
+        "portfolio",
+        "data-science",
+        "tactical-hud",
+        "pwa",
+        "terminal"
     ],
-    "homepage": "https://startbootstrap.com/template-overviews/resume",
-    "bugs": {
-        "url": "https://github.com/BlackrockDigital/startbootstrap-resume/issues",
-        "email": "feedback@startbootstrap.com"
-    },
+    "homepage": "https://sajid-ul-islam.github.io/",
     "license": "MIT",
-    "author": "Start Bootstrap",
-    "contributors": [
-        "David Miller (http://davidmiller.io/)"
-    ],
+    "author": "Sajid Islam",
     "repository": {
         "type": "git",
-        "url": "https://github.com/BlackrockDigital/startbootstrap-resume.git"
+        "url": "https://github.com/Sajid-ul-Islam/Sajid-ul-Islam.github.io.git"
     },
     "dependencies": {},
     "devDependencies": {
