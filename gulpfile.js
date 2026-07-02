@@ -11,7 +11,8 @@ const header = require("gulp-header");
 const merge = require("merge-stream");
 const plumber = require("gulp-plumber");
 const rename = require("gulp-rename");
-const sass = require('gulp-sass')(require('sass'));
+const gulpSass = require('gulp-sass');
+const sass = gulpSass(require('sass'));
 const terser = require("gulp-terser");
 
 // Load package.json for banner
@@ -56,7 +57,7 @@ function css() {
       outputStyle: "expanded",
       includePaths: "./node_modules",
     }))
-    .on("error", sass.logError)
+
     .pipe(autoprefixer({
       overrideBrowserslist: ['last 2 versions'],
       cascade: false
