@@ -243,21 +243,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // --- Theme Switching Ops ---
     const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
+    const root = document.documentElement;
+
+    const applyTheme = (theme, accent) => {
+        root.setAttribute('data-theme', theme);
+        root.setAttribute('data-accent', accent);
+        document.body.setAttribute('data-theme', theme); // for backward compatibility
+        updateThemeIcon(theme);
+    };
 
     const savedTheme = localStorage.getItem('tactical-theme') || 'dark';
-    body.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme);
+    const savedAccent = localStorage.getItem('tactical-accent') || 'green';
+    applyTheme(savedTheme, savedAccent);
 
     if (themeToggle) {
         themeToggle.addEventListener('click', () => {
-            const currentTheme = body.getAttribute('data-theme');
+            const currentTheme = root.getAttribute('data-theme');
             const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            body.setAttribute('data-theme', newTheme);
+            applyTheme(newTheme, root.getAttribute('data-accent'));
             localStorage.setItem('tactical-theme', newTheme);
-            updateThemeIcon(newTheme);
         });
     }
+
+    // --- Accent Color Switcher ---
+    const colorSwatches = document.querySelectorAll('.color-swatch');
+    colorSwatches.forEach(swatch => {
+        swatch.addEventListener('click', (e) => {
+            const newAccent = e.target.getAttribute('data-color');
+            const currentTheme = root.getAttribute('data-theme');
+            applyTheme(currentTheme, newAccent);
+            localStorage.setItem('tactical-accent', newAccent);
+        });
+    });
 
     // --- Glitch Effect Initializer ---
     document.querySelectorAll('.section-label, h2:not(.display-2)').forEach(el => {

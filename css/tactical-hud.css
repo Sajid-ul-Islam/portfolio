@@ -60,6 +60,62 @@
     /* Final tactical purge of textures */
 }
 
+/* --- ACCENT COLORS --- */
+/* Green (Default) */
+:root[data-accent="green"] {
+    --primary-color: #22c55e;
+    --primary-light: #4ade80;
+    --accent-color: #86efac;
+    --text-highlight: #22c55e;
+}
+:root[data-theme="light"][data-accent="green"] {
+    --text-highlight: #16a34a;
+}
+
+/* Orange */
+:root[data-accent="orange"] {
+    --primary-color: #f97316;
+    --primary-light: #fb923c;
+    --accent-color: #fdba74;
+    --text-highlight: #f97316;
+}
+:root[data-theme="light"][data-accent="orange"] {
+    --text-highlight: #ea580c;
+}
+
+/* Yellow (Gold) */
+:root[data-accent="yellow"] {
+    --primary-color: #eab308;
+    --primary-light: #facc15;
+    --accent-color: #fef08a;
+    --text-highlight: #eab308;
+}
+:root[data-theme="light"][data-accent="yellow"] {
+    --text-highlight: #ca8a04;
+}
+
+/* Blue */
+:root[data-accent="blue"] {
+    --primary-color: #3b82f6;
+    --primary-light: #60a5fa;
+    --accent-color: #93c5fd;
+    --text-highlight: #3b82f6;
+}
+:root[data-theme="light"][data-accent="blue"] {
+    --text-highlight: #2563eb;
+}
+
+/* Red */
+:root[data-accent="red"] {
+    --primary-color: #ef4444;
+    --primary-light: #f87171;
+    --accent-color: #fca5a5;
+    --text-highlight: #ef4444;
+}
+:root[data-theme="light"][data-accent="red"] {
+    --text-highlight: #dc2626;
+}
+
 [data-theme="light"] .ai-chat-toggle {
     background: #0f172a !important;
     border-color: #22c55e !important;
@@ -1566,4 +1622,4 @@ body {
     .telemetry-overlay {
         display: none !important; /* Hide background noise data on small screens */
     }
-}
+}

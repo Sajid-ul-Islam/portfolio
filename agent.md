@@ -195,6 +195,9 @@ exit           Terminate session (close terminal)
 | `file-tree.css` | VS Code file explorer styling |
 | `floating-widgets.css` | HUD overlay widgets |
 
+### Theming Architecture (Multi-Page)
+The project supports full-page UX/UI replacements via distinct HTML files. For details on how to manage or add new themes, see [THEMING_ARCHITECTURE.md](./THEMING_ARCHITECTURE.md).
+
 ### Design System
 
 **Color Palette:**

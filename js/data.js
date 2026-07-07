@@ -618,6 +618,13 @@ const DATA = {
       icon: "file-text",
       color: "#da552f",
     },
+    {
+      id: "huggingface",
+      name: "Hugging Face",
+      url: "https://huggingface.co/Sajid-ul-Islam",
+      icon: "robot",
+      color: "#FFD21E",
+    },
   ],
   skillGroups: [
     {
@@ -637,10 +644,10 @@ const DATA = {
         { name: "RAG (Retrieval-Augmented Generation)", category: "AI", icon: "https://img.icons8.com/color/48/000000/artificial-intelligence.png", level: 78 },
         { name: "Machine Learning Engineering", category: "AI", icon: "https://img.icons8.com/color/48/000000/neural-network.png", level: 85 },
         { name: "Python & R", category: "Data", icon: "https://img.icons8.com/color/48/000000/python.png", level: 85 },
-        { name: "Power BI & Tableau", category: "BI", icon: "https://img.icons8.com/color/48/000000/power-bi.png", level: 90 },
-        { name: "Excel & Spreadsheets", category: "Data", icon: "https://img.icons8.com/color/48/000000/microsoft-excel-2019--v1.png", level: 95 },
+
         { name: "Data Visualization", category: "BI", icon: "https://img.icons8.com/color/48/000000/combo-chart.png", level: 92 },
-        { name: "Prompt Engineering", category: "AI", icon: "https://img.icons8.com/color/48/000000/robot-intellectual.png", level: 88 }
+        { name: "Prompt Engineering", category: "AI", icon: "https://img.icons8.com/color/48/000000/robot-intellectual.png", level: 88 },
+        { name: "Agentic RAG", category: "AI", icon: "https://img.icons8.com/color/48/000000/artificial-intelligence.png", level: 85 }
       ]
     },
     {
