@@ -1,6 +1,7 @@
 /**
- * AI ORACLE - CHAT BOT LOGIC
+ * AI ORACLE - CHAT BOT LOGIC (Secured)
  * Features a reactive, knowledge-based assistant for the portfolio.
+ * SECURITY: All API keys are provided via localStorage only.
  */
 
 let userTelemetry = { ip: "UNKNOWN", os: "DETECTION_FAILED" };
@@ -16,12 +17,13 @@ async function fetchUserTelemetry() {
     if (osMatch) userTelemetry.os = osMatch[1];
 }
 
-// NOTE: No default API key is stored here intentionally.
-// To enable Gemini AI responses, use the terminal command:
-//   link_gemini YOUR_KEY_HERE
-// Your key will be stored only in your browser's localStorage.
+// SECURITY: No default API keys are stored here.
+// To enable AI responses, use terminal commands:
+//   link_gemini YOUR_GEMINI_KEY
+//   link_openai YOUR_OPENAI_KEY
+// Keys are stored only in browser localStorage.
 const DEFAULT_GEMINI_KEY = null;
-const DEFAULT_OPENAI_KEY = "sk-proj-u0I88KovzM7vUaNoH0-u_uR2Kx-vO-v5y-f-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-v-gpgA"; // Placeholder — replace via localStorage
+const DEFAULT_OPENAI_KEY = null;
 
 // --- MISSION_INTEL_DOSSIER ---
 const LOCAL_INTEL = {
@@ -149,7 +151,7 @@ function initAiChat() {
 
         // 1. LOCAL_INTEL_CHECK
         let localResponse = null;
-        for (let group in KNOWLEDGE_GROUPS) {
+        for (const group in KNOWLEDGE_GROUPS) {
             if (fuzzyMatch(text, KNOWLEDGE_GROUPS[group].keys)) {
                 localResponse = typeof KNOWLEDGE_GROUPS[group].response === 'function' ? KNOWLEDGE_GROUPS[group].response() : KNOWLEDGE_GROUPS[group].response;
                 break;
@@ -176,6 +178,8 @@ function initAiChat() {
         // --- Try Gemini Primary ---
         try {
             const geminiKey = localStorage.getItem('GEMINI_UPLINK_KEY') || DEFAULT_GEMINI_KEY;
+            if (!geminiKey) throw new Error("NO_GEMINI_KEY");
+            
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${geminiKey}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -200,29 +204,29 @@ function initAiChat() {
         // --- Try OpenAI Secondary ---
         try {
             const oaiKey = localStorage.getItem('OPENAI_UPLINK_KEY') || DEFAULT_OPENAI_KEY;
-            if (oaiKey && !oaiKey.includes('-v-v-v')) {
-                const response = await fetch('https://api.openai.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${oaiKey}` },
-                    body: JSON.stringify({
-                        model: "gpt-3.5-turbo",
-                        messages: [
-                            { role: "system", content: `Identity: Sajid Islam's AI Oracle. Dossier: ${LOCAL_INTEL.profile}. Tone: Tactical.` },
-                            { role: "user", content: text }
-                        ]
-                    })
-                });
-                const data = await response.json();
-                const aiResponse = data.choices?.[0]?.message?.content;
-                if (aiResponse) {
-                    clearInterval(statusInterval);
-                    statusMsg.remove();
-                    addMessage(aiResponse, 'bot');
-                    if (typeof AudioEngine !== 'undefined') AudioEngine.play('beep');
-                    return;
-                }
+            if (!oaiKey) throw new Error("NO_OPENAI_KEY");
+            
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${oaiKey}` },
+                body: JSON.stringify({
+                    model: "gpt-3.5-turbo",
+                    messages: [
+                        { role: "system", content: `Identity: Sajid Islam's AI Oracle. Dossier: ${LOCAL_INTEL.profile}. Tone: Tactical.` },
+                        { role: "user", content: text }
+                    ]
+                })
+            });
+            const data = await response.json();
+            const aiResponse = data.choices?.[0]?.message?.content;
+            if (aiResponse) {
+                clearInterval(statusInterval);
+                statusMsg.remove();
+                addMessage(aiResponse, 'bot');
+                if (typeof AudioEngine !== 'undefined') AudioEngine.play('beep');
+                return;
             }
-        } catch (err) { console.error("[OPENAI_OFFLINE] Neural bridge severed."); }
+        } catch (err) { console.error("[OPENAI_OFFLINE] " + err.message); }
 
         clearInterval(statusInterval);
         statusMsg.remove();
@@ -234,4 +238,5 @@ function initAiChat() {
     if (input) input.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 }
 
+// Remove duplicate initAiChat from tactical-data.js by not re-defining here
 window.addEventListener('DOMContentLoaded', initAiChat);

@@ -3,10 +3,17 @@
     "name": "sajid-islam-portfolio",
     "version": "1.0.0",
     "scripts": {
-        "start": "node_modules/.bin/gulp watch",
-        "build": "gulp",
-        "bundle": "gulp bundle",
-        "build:prod": "gulp build && gulp bundle"
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "eslint js/",
+        "lint:fix": "eslint js/ --fix",
+        "format": "prettier --write js/**/*.js css/**/*.css",
+        "start": "vite",
+        "legacy:start": "node_modules/.bin/gulp watch",
+        "legacy:build": "gulp",
+        "legacy:bundle": "gulp bundle",
+        "legacy:build:prod": "gulp build && gulp bundle"
     },
     "description": "High-performance personal portfolio for Sajid Islam, Data Scientist & Business Analyst. Features a Tactical HUD aesthetic, interactive terminal, PWA support, and AI-powered chatbot.",
     "keywords": [
@@ -23,10 +30,12 @@
         "type": "git",
         "url": "https://github.com/Sajid-ul-Islam/Sajid-ul-Islam.github.io.git"
     },
-    "dependencies": {},
     "devDependencies": {
+        "@types/node": "^26.1.1",
         "browser-sync": "2.26.7",
         "del": "4.1.1",
+        "eslint": "^10.6.0",
+        "eslint-config-prettier": "^10.1.8",
         "gulp": "4.0.2",
         "gulp-autoprefixer": "6.1.0",
         "gulp-clean-css": "4.2.0",
@@ -35,8 +44,10 @@
         "gulp-plumber": "^1.2.1",
         "gulp-rename": "1.4.0",
         "gulp-sass": "^5.1.0",
-        "sass": "^1.73.0",
         "gulp-terser": "^2.1.0",
-        "merge-stream": "2.0.0"
+        "merge-stream": "2.0.0",
+        "prettier": "^3.9.4",
+        "sass": "^1.73.0",
+        "vite": "^8.1.4"
     }
 }

@@ -1,5 +1,5 @@
 /**
- * TACTICAL DATA SOURCE - v3.0
+ * TACTICAL DATA SOURCE - v3.0 (ES Module)
  * Comprehensive dataset for the portfolio
  */
 
@@ -13,6 +13,7 @@ const DATA = {
       liveUrl: "https://share.streamlit.io/user/saajiidi",
       featured: true,
       technologies: ["Python", "Streamlit", "Automation", "Data Ops"],
+      category: "automation",
       caseStudy: {
         role: "Solutions Architect",
         timeline: "2024 - 2025",
@@ -437,7 +438,7 @@ const DATA = {
         impact: ["Provided a basic online storefront."],
         metrics: [{ label: "Stack", value: "HTML/CSS/JS" }],
       },
-    }
+    },
   ],
   blogPosts: [
     {
@@ -457,13 +458,13 @@ const DATA = {
       url: "https://www.linkedin.com/pulse/python-automation-pinterest-scrapers-sajid-islam/"
     },
     {
-        id: "blog-3",
-        title: "Modern Dashboards: Beyond Aesthetics",
-        date: "Aug 20, 2024",
-        excerpt: "Why readability wins over flashy animations when building mission-critical tools.",
-        tags: ["Data Viz", "UI/UX", "Analytics"],
-        url: "https://www.linkedin.com/pulse/modern-dashboards-beyond-aesthetics-sajid-islam/"
-      }
+      id: "blog-3",
+      title: "Modern Dashboards: Beyond Aesthetics",
+      date: "Aug 20, 2024",
+      excerpt: "Why readability wins over flashy animations when building mission-critical tools.",
+      tags: ["Data Viz", "UI/UX", "Analytics"],
+      url: "https://www.linkedin.com/pulse/modern-dashboards-beyond-aesthetics-sajid-islam/"
+    }
   ],
   learningItems: [
     { name: "Agentic Workflows (LangGraph/CrewAI)", category: "AI", progress: 82 },
@@ -501,48 +502,12 @@ const DATA = {
       isOpen: true,
       items: [
         { id: "home", label: "Welcome", href: "/", icon: "home", extension: "tsx" },
-        {
-          id: "experience",
-          label: "Experience",
-          href: "#experience",
-          icon: "briefcase",
-          extension: "tsx",
-        },
-        {
-          id: "skills",
-          label: "Skills",
-          href: "#skills",
-          icon: "code",
-          extension: "json",
-        },
-        {
-          id: "projects",
-          label: "Projects",
-          href: "#projects",
-          icon: "folder",
-          extension: "tsx",
-        },
-        {
-            id: "education",
-            label: "Education",
-            href: "#education",
-            icon: "graduation-cap",
-            extension: "tsx",
-        },
-        {
-            id: "family",
-            label: "Family",
-            href: "#family",
-            icon: "users",
-            extension: "tsx",
-        },
-        {
-          id: "contact",
-          label: "Contact",
-          href: "#contact",
-          icon: "mail",
-          extension: "tsx",
-        },
+        { id: "experience", label: "Experience", href: "#experience", icon: "briefcase", extension: "tsx" },
+        { id: "skills", label: "Skills", href: "#skills", icon: "code", extension: "json" },
+        { id: "projects", label: "Projects", href: "#projects", icon: "folder", extension: "tsx" },
+        { id: "education", label: "Education", href: "#education", icon: "graduation-cap", extension: "tsx" },
+        { id: "family", label: "Family", href: "#family", icon: "users", extension: "tsx" },
+        { id: "contact", label: "Contact", href: "#contact", icon: "mail", extension: "tsx" },
       ],
     },
     {
@@ -551,20 +516,8 @@ const DATA = {
       isOpen: false,
       items: [
         { id: "favorites", label: "Favorites", href: "/Favorites", icon: "star", extension: "tsx" },
-        {
-          id: "gaming",
-          label: "Gaming",
-          href: "/Gaming",
-          icon: "gamepad-2",
-          extension: "tsx",
-        },
-        {
-          id: "blogs",
-          label: "Blogs",
-          href: "/Blogs",
-          icon: "book-open",
-          extension: "md",
-        },
+        { id: "gaming", label: "Gaming", href: "/Gaming", icon: "gamepad-2", extension: "tsx" },
+        { id: "blogs", label: "Blogs", href: "/Blogs", icon: "book-open", extension: "md" },
       ],
     },
     {
@@ -572,59 +525,17 @@ const DATA = {
       label: "MORE",
       isOpen: false,
       items: [
-        {
-          id: "learning",
-          label: "Learning",
-          href: "/Learning",
-          icon: "graduation-cap",
-          extension: "tsx",
-        },
-        {
-          id: "startup",
-          label: "Startup",
-          href: "/Startup",
-          icon: "rocket",
-          extension: "tsx",
-        },
+        { id: "learning", label: "Learning", href: "/Learning", icon: "graduation-cap", extension: "tsx" },
+        { id: "startup", label: "Startup", href: "/Startup", icon: "rocket", extension: "tsx" },
       ],
     },
   ],
   socialLinks: [
-    {
-      id: "linkedin",
-      name: "LinkedIn",
-      url: "https://www.linkedin.com/in/sajidislamchowdhury/",
-      icon: "linkedin",
-      color: "#0077b5",
-    },
-    {
-      id: "github",
-      name: "GitHub",
-      url: "https://github.com/Sajid-ul-Islam",
-      icon: "github",
-      color: "#333333",
-    },
-    {
-      id: "whatsapp",
-      name: "WhatsApp",
-      url: "https://wa.me/+8801824526054?text=",
-      icon: "message-circle",
-      color: "#25D366",
-    },
-    {
-      id: "resume",
-      name: "Resume",
-      url: "https://sajid-ul-islam.github.io/resume.html",
-      icon: "file-text",
-      color: "#da552f",
-    },
-    {
-      id: "huggingface",
-      name: "Hugging Face",
-      url: "https://huggingface.co/Sajid-ul-Islam",
-      icon: "robot",
-      color: "#FFD21E",
-    },
+    { id: "linkedin", name: "LinkedIn", url: "https://www.linkedin.com/in/sajidislamchowdhury/", icon: "linkedin", color: "#0077b5" },
+    { id: "github", name: "GitHub", url: "https://github.com/Sajid-ul-Islam", icon: "github", color: "#333333" },
+    { id: "whatsapp", name: "WhatsApp", url: "https://wa.me/+8801824526054?text=", icon: "message-circle", color: "#25D366" },
+    { id: "resume", name: "Resume", url: "https://sajid-ul-islam.github.io/resume.html", icon: "file-text", color: "#da552f" },
+    { id: "huggingface", name: "Hugging Face", url: "https://huggingface.co/Sajid-ul-Islam", icon: "robot", color: "#FFD21E" },
   ],
   skillGroups: [
     {
@@ -644,7 +555,6 @@ const DATA = {
         { name: "RAG (Retrieval-Augmented Generation)", category: "AI", icon: "https://img.icons8.com/color/48/000000/artificial-intelligence.png", level: 78 },
         { name: "Machine Learning Engineering", category: "AI", icon: "https://img.icons8.com/color/48/000000/neural-network.png", level: 85 },
         { name: "Python & R", category: "Data", icon: "https://img.icons8.com/color/48/000000/python.png", level: 85 },
-
         { name: "Data Visualization", category: "BI", icon: "https://img.icons8.com/color/48/000000/combo-chart.png", level: 92 },
         { name: "Prompt Engineering", category: "AI", icon: "https://img.icons8.com/color/48/000000/robot-intellectual.png", level: 88 },
         { name: "Agentic RAG", category: "AI", icon: "https://img.icons8.com/color/48/000000/artificial-intelligence.png", level: 85 }
@@ -747,9 +657,9 @@ const DATA = {
         "Managing inventory, sales growth strategies, and multi-channel customer engagement"
       ],
       technologies: ["Retail", "Business Management"],
-    }
+    },
   ]
 };
 
-// Attach to global window object so tactical-data.js can read it
+// Attach to global window for backward compatibility
 window.DATA = DATA;

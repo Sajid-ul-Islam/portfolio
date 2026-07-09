@@ -195,7 +195,7 @@ async function initializeTacticalData() {
     if (window.TACTICAL_INFO && window.TACTICAL_INFO.Github) fetchGithubRepos(window.TACTICAL_INFO.Github.split('/').pop());
     else fetchGithubRepos('Sajid-ul-Islam');
 
-    initAIChat();
+    // initAIChat removed — handled by ai-bot.js
 
     setTimeout(() => {
         document.querySelectorAll('.skeleton').forEach(el => el.classList.add('fade-out'));
@@ -490,118 +490,6 @@ async function fetchGithubRepos(username) {
         const repos = await r.json();
         container.innerHTML = repos.map(repo => `<div class="p-2 border-bottom border-secondary border-opacity-10"><a href="${repo.html_url}" target="_blank" class="small text-primary">${repo.name.toUpperCase()}</a></div>`).join('');
     } catch (e) { container.innerHTML = 'OFFLINE'; }
-}
-
-function initAIChat() {
-    if (!document.getElementById('aiChatContainer')) {
-        document.body.insertAdjacentHTML('beforeend', `<div class="ai-chat-container card-glass" id="aiChatContainer"><div class="ai-chat-header" onclick="toggleAIChat()">AI_COMMS_V4</div><div class="ai-chat-body" id="aiChatBody"></div><input type="text" id="aiChatInput" onkeypress="if(event.key==='Enter')sendAIMessage()"></div>`);
-    }
-}
-
-function toggleAIChat() { document.getElementById('aiChatContainer').classList.toggle('active'); }
-
-async function sendAIMessage() {
-    const input = document.getElementById('aiChatInput');
-    const msg = input.value.trim();
-    if (!msg) return;
-    const body = document.getElementById('aiChatBody');
-    body.insertAdjacentHTML('beforeend', `<div class="ai-message user">${msg}</div>`);
-    input.value = '';
-
-    // Simulated ML/NLP Processing State
-    const loadingId = 'loading-' + Date.now();
-    body.insertAdjacentHTML('beforeend', `<div class="ai-message system loading" id="${loadingId}">[NLP_PIPELINE] Tokenizing & extracting intents...</div>`);
-    body.scrollTop = body.scrollHeight;
-
-    setTimeout(() => {
-        const loadingEl = document.getElementById(loadingId);
-        if (loadingEl) loadingEl.remove();
-
-        const nlpResult = processNLP(msg);
-
-        let responseHtml = `<div class="ai-message bot">`;
-        responseHtml += `<div class="text-secondary" style="font-size: 0.55rem; margin-bottom: 6px; border-bottom: 1px solid rgba(34,197,94,0.2); padding-bottom: 4px;">INTENT: ${nlpResult.intent.toUpperCase()} | CONFIDENCE: ${(nlpResult.confidence * 100).toFixed(1)}%</div>`;
-        responseHtml += nlpResult.response;
-        responseHtml += `</div>`;
-
-        body.insertAdjacentHTML('beforeend', responseHtml);
-
-        if (nlpResult.action) {
-            setTimeout(nlpResult.action, 800);
-        }
-        body.scrollTop = body.scrollHeight;
-        if (typeof AudioEngine !== 'undefined') AudioEngine.play('beep');
-    }, 1200 + Math.random() * 800); // Simulate dynamic RAG retrieval time
-}
-
-function processNLP(text) {
-    const normalized = text.toLowerCase().replace(/[^\w\s]/gi, '');
-    const words = normalized.split(' ');
-
-    // 1. INTENT CLASSIFICATION (Bag of Words TF-IDF Simulation)
-    const intentModels = {
-        greeting: ['hi', 'hello', 'hey', 'greetings', 'morning', 'evening'],
-        projects: ['project', 'portfolio', 'work', 'build', 'made', 'app', 'dashboard', 'repository'],
-        skills: ['skill', 'tech', 'stack', 'tool', 'language', 'know', 'learn', 'python', 'react', 'sql'],
-        experience: ['experience', 'job', 'work', 'career', 'role', 'history', 'company', 'employed'],
-        contact: ['contact', 'email', 'hire', 'reach', 'message', 'call', 'whatsapp'],
-        whoami: ['who', 'about', 'profile', 'background', 'sajid']
-    };
-
-    let bestIntent = 'unknown';
-    let maxScore = 0;
-
-    for (const [intent, keywords] of Object.entries(intentModels)) {
-        let score = 0;
-        keywords.forEach(kw => { if (words.includes(kw)) score += 1.5; else if (normalized.includes(kw)) score += 0.5; });
-        if (score > maxScore) { maxScore = score; bestIntent = intent; }
-    }
-
-    // 2. NAMED ENTITY RECOGNITION (NER) - Match against actual DATA
-    let extractedProject = null;
-    if (window.DATA && window.DATA.projects) {
-        extractedProject = window.DATA.projects.find(p => {
-            const titleWords = p.title.toLowerCase().split(' ');
-            return titleWords.some(tw => tw.length > 3 && words.includes(tw));
-        });
-    }
-
-    let response = "I couldn't extract a clear tactical intent. Try asking about 'projects', 'skills', or 'experience'.";
-    let action = null;
-    let confidence = maxScore > 0 ? Math.min(0.4 + (maxScore * 0.18), 0.99) : 0.12;
-
-    // 3. GENERATIVE RESPONSE ROUTING
-    if (extractedProject) {
-        bestIntent = 'specific_project';
-        confidence = 0.96;
-        response = `Vector DB match found: <strong>${extractedProject.title}</strong>.<br><br>${extractedProject.description}<br><br><button class="btn btn-sm btn-outline-primary mt-2" onclick="openPortfolioBridge(event, '${extractedProject.id}')">OPEN DOSSIER</button>`;
-    } else {
-        switch (bestIntent) {
-            case 'greeting':
-                response = "Greetings, Operative. How can I assist with your situational awareness of Sajid's portfolio today?";
-                break;
-            case 'projects':
-                response = "Accessing project nodes. Sajid has built extensive BI dashboards and automation tools. Highlighting the grid now.";
-                action = () => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
-                break;
-            case 'skills':
-                response = "Querying tech stack matrices. Primary proficiencies include Python, Machine Learning, and Data Ops. Routing you to the radar chart.";
-                action = () => document.getElementById('skills')?.scrollIntoView({ behavior: 'smooth' });
-                break;
-            case 'experience':
-                response = "Retrieving career logs. Notable experience includes strategic operations at Daraz and DEEN Commerce. Scrolling timeline...";
-                action = () => document.getElementById('experience')?.scrollIntoView({ behavior: 'smooth' });
-                break;
-            case 'contact':
-                response = "Initializing secure comms channel. You can reach out via encrypted email or direct Signal (WhatsApp).";
-                action = () => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                break;
-            case 'whoami':
-                response = "Sajid Islam is a Data Scientist & Business Analyst specializing in turning complex datasets into strategic growth. Based in Dhaka, Bangladesh.";
-                break;
-        }
-    }
-    return { intent: bestIntent, response, action, confidence };
 }
 
 // PORTFOLIO BRIDGE (Project Deep Dives HUD)

@@ -74,118 +74,8 @@ class ScrollGlitchEffect {
 }
 
 // ===== 3. AUDIO ENGINE =====
-class AudioEngineClass {
-    constructor() {
-        this.enabled = localStorage.getItem('tactical-audio') !== 'disabled';
-        this.sounds = {};
-        this.init();
-    }
-    
-    init() {
-        // Create audio context on first user interaction
-        this.ctx = null;
-        
-        // Generate sounds procedurally
-        this.generateSounds();
-        
-        // Enable on first interaction
-        document.addEventListener('click', () => this.enableAudio(), { once: true });
-        document.addEventListener('keydown', () => this.enableAudio(), { once: true });
-    }
-    
-    enableAudio() {
-        if (!this.ctx) {
-            this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
-    
-    generateSounds() {
-        // Terminal beep
-        this.sounds.beep = () => {
-            if (!this.ctx || !this.enabled) return;
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            
-            osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.1);
-            
-            gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-            
-            osc.start(this.ctx.currentTime);
-            osc.stop(this.ctx.currentTime + 0.1);
-        };
-        
-        // Key type click
-        this.sounds.type = () => {
-            if (!this.ctx || !this.enabled) return;
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            
-            osc.frequency.setValueAtTime(200 + Math.random() * 100, this.ctx.currentTime);
-            
-            gain.gain.setValueAtTime(0.03, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.02);
-            
-            osc.start(this.ctx.currentTime);
-            osc.stop(this.ctx.currentTime + 0.02);
-        };
-        
-        // Hover hum
-        this.sounds.hover = () => {
-            if (!this.ctx || !this.enabled) return;
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            
-            osc.frequency.setValueAtTime(150, this.ctx.currentTime);
-            osc.frequency.exponentialRampToValueAtTime(300, this.ctx.currentTime + 0.15);
-            
-            gain.gain.setValueAtTime(0.05, this.ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0, this.ctx.currentTime + 0.15);
-            
-            osc.start(this.ctx.currentTime);
-            osc.stop(this.ctx.currentTime + 0.15);
-        };
-        
-        // Click confirm
-        this.sounds.click = () => {
-            if (!this.ctx || !this.enabled) return;
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-            
-            osc.type = 'square';
-            osc.frequency.setValueAtTime(400, this.ctx.currentTime);
-            
-            gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.08);
-            
-            osc.start(this.ctx.currentTime);
-            osc.stop(this.ctx.currentTime + 0.08);
-        };
-    }
-    
-    play(soundName) {
-        if (this.sounds[soundName]) {
-            this.sounds[soundName]();
-        }
-    }
-    
-    toggle() {
-        this.enabled = !this.enabled;
-        localStorage.setItem('tactical-audio', this.enabled ? 'enabled' : 'disabled');
-        return this.enabled;
-    }
-}
-
-const AudioEngine = new AudioEngineClass();
+// AudioEngine is defined in audio-engine.js (loaded before this file)
+// and exposed as window.AudioEngine. Using the global reference here.
 
 // ===== 4. KEYBOARD SHORTCUTS =====
 class KeyboardNavigator {
@@ -775,5 +665,4 @@ class DraggableHUDElement {
 
 // Export for global access
 window.TestimonialsCarousel = TestimonialsCarousel;
-window.AudioEngine = AudioEngine;
 window.CommandPalette = CommandPalette;

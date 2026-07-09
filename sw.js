@@ -3,7 +3,7 @@
  * PWA Support for offline functionality with Network-First strategy for updates
  */
 
-const CACHE_NAME = 'tactical-intel-v3';
+const CACHE_NAME = 'tactical-intel-v4';
 const STATIC_ASSETS = [
     '/',
     '/index.html',
@@ -16,6 +16,7 @@ const STATIC_ASSETS = [
     '/css/github-feed.css',
     '/css/file-tree.css',
     '/js/data.js',
+    '/js/audio-engine.js',
     '/js/tactical-core.js',
     '/js/tactical-data.js',
     '/js/pwa-loader.js',
