@@ -111,7 +111,28 @@ async function initializeTacticalData() {
         fetchSheetData(SHEETS.AWARDS)
     ]);
 
-    const finalProjects = projects.length > 0 ? projects : (window.DATA ? window.DATA.projects : []);
+    const finalProjects = (projects.length > 0 ? projects : (window.DATA ? window.DATA.projects : [])).map(rawItem => {
+        const item = {
+            id: rawItem.id || rawItem.Id || `prj-${Math.random().toString(36).substr(2, 9)}`,
+            title: rawItem.title || rawItem.Title || 'Untitled Project',
+            description: rawItem.description || rawItem.Description || 'No description provided.',
+            category: rawItem.category || rawItem.Category || 'all',
+            featured: rawItem.featured || rawItem.Featured || false,
+            technologies: rawItem.technologies || rawItem.Technologies || [],
+            liveUrl: rawItem.liveUrl || rawItem.LiveUrl || rawItem.Url || rawItem.URL || '',
+            githubUrl: rawItem.githubUrl || rawItem.GithubUrl || '',
+            caseStudy: rawItem.caseStudy || rawItem.CaseStudy || null
+        };
+        if (typeof item.technologies === 'string') {
+            item.technologies = item.technologies.split(',').map(t => t.trim());
+        }
+        if (typeof item.featured === 'string') {
+            item.featured = item.featured.toLowerCase() === 'true';
+        }
+        return item;
+    });
+    window.projectsList = finalProjects;
+
     const finalExperience = experience.length > 0 ? experience : (window.DATA ? window.DATA.experiences : []);
     const finalSkills = skills.length > 0 ? skills : (window.DATA ? window.DATA.skillGroups : []);
 
@@ -385,7 +406,7 @@ window.decryptDossier = (id, el, force = false) => {
     const descEl = document.getElementById(`desc-${id}`);
     const dossier = document.getElementById(`dossier-${id}`);
     if (!descEl || (!force && descEl.classList.contains('decrypted'))) return;
-    const project = (window.DATA && window.DATA.projects) ? window.DATA.projects.find(p => p.id == id) : null;
+    const project = window.projectsList ? window.projectsList.find(p => p.id == id) : ((window.DATA && window.DATA.projects) ? window.DATA.projects.find(p => p.id == id) : null);
     const actualText = project ? project.description : "DATA_RECOVERY_FAILED.";
     if (typeof AudioEngine !== 'undefined') AudioEngine.play('type');
     descEl.classList.add('decrypting');
