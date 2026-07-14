@@ -98,100 +98,51 @@ function parseCSV(csvText) {
 }
 
 async function initializeTacticalData() {
-    console.log('[SYNC] Connecting to Intel Grid...');
+    console.log('[SYNC] Connecting to Intel Grid via Unified Data Engine...');
 
     runTypewriter(DEFAULT_INFO);
 
-    const [infoData, experience, education, skills, projects, awards] = await Promise.all([
-        fetchSheetData(SHEETS.INFO),
-        fetchSheetData(SHEETS.EXPERIENCE),
-        fetchSheetData(SHEETS.EDUCATION),
-        fetchSheetData(SHEETS.SKILLS),
-        fetchSheetData(SHEETS.PROJECTS),
-        fetchSheetData(SHEETS.AWARDS)
-    ]);
+    // Load dynamic data globally
+    const data = await window.PortfolioData.load();
+    
+    const info = window.PortfolioData.getInfo();
+    const finalExperience = window.PortfolioData.getExperiences();
+    const finalEducation = window.PortfolioData.getEducation();
+    const finalSkillGroups = window.PortfolioData.getSkills();
+    const finalProjects = window.PortfolioData.getProjects();
+    const fileTree = window.PortfolioData.getFileTree();
+    const blogs = window.PortfolioData.getBlogPosts();
+    const learning = window.PortfolioData.getLearning();
+    const gaming = window.PortfolioData.getGaming();
 
-    const finalProjects = (projects.length > 0 ? projects : (window.DATA ? window.DATA.projects : [])).map(rawItem => {
-        const item = {
-            id: rawItem.id || rawItem.Id || `prj-${Math.random().toString(36).substr(2, 9)}`,
-            title: rawItem.title || rawItem.Title || 'Untitled Project',
-            description: rawItem.description || rawItem.Description || 'No description provided.',
-            category: rawItem.category || rawItem.Category || 'all',
-            featured: rawItem.featured || rawItem.Featured || false,
-            technologies: rawItem.technologies || rawItem.Technologies || [],
-            liveUrl: rawItem.liveUrl || rawItem.LiveUrl || rawItem.Url || rawItem.URL || '',
-            githubUrl: rawItem.githubUrl || rawItem.GithubUrl || '',
-            caseStudy: rawItem.caseStudy || rawItem.CaseStudy || null
-        };
-        if (typeof item.technologies === 'string') {
-            item.technologies = item.technologies.split(',').map(t => t.trim());
-        }
-        if (typeof item.featured === 'string') {
-            item.featured = item.featured.toLowerCase() === 'true';
-        }
-        return item;
-    });
     window.projectsList = finalProjects;
 
-    const finalExperience = experience.length > 0 ? experience : (window.DATA ? window.DATA.experiences : []);
-    const finalSkills = skills.length > 0 ? skills : (window.DATA ? window.DATA.skillGroups : []);
-
-    // Dynamically inject the Streamlit project
-    if (!finalProjects.find(p => p.liveUrl === 'https://global-economics.streamlit.app')) {
-        finalProjects.push({
-            id: 'global-eco',
-            title: 'Global Economics Dashboard',
-            description: 'An interactive Streamlit web application visualizing global economic indicators, providing strategic data analysis on worldwide market trends.',
-            technologies: ['Python', 'Streamlit', 'Pandas', 'Data Viz'],
-            category: 'dashboard',
-            liveUrl: 'https://global-economics.streamlit.app',
-            featured: true,
-            caseStudy: {
-                problem: 'Need for real-time visualization of complex global economic datasets.',
-                solution: 'Built a responsive Streamlit dashboard to aggregate and display key economic metrics interactively.',
-                impact: ['Improved data accessibility', 'Streamlined economic analysis workflow']
-            }
-        });
-    }
-
-    // Dynamically inject the Streamlit Hub project
-    if (!finalProjects.find(p => p.liveUrl === 'https://share.streamlit.io/user/saajiidi')) {
-        finalProjects.unshift({
-            id: 'streamlit-hub',
-            title: 'Streamlit App Hub',
-            description: 'A centralized command center for 10+ operational data apps, including inventory trackers, sales dashboards, and automation tools.',
-            technologies: ['Python', 'Streamlit', 'Data Ops', 'Automation'],
-            category: 'dashboard',
-            liveUrl: 'https://share.streamlit.io/user/saajiidi',
-            featured: true,
-            caseStudy: {
-                problem: 'Operational tools were scattered across different deployments, making it difficult for stakeholders to find the right dashboard.',
-                solution: 'Consolidated all active Streamlit tools into a single shared workspace with unified data connectors.',
-                impact: ['50% reduction in app discovery time', 'Standardized data ingestion']
-            }
-        });
-    }
-
-    if (infoData.length > 0) {
-        const info = {};
-        infoData.forEach(item => { info[item.Key] = item.Value; });
-        renderInfo(info);
-    }
+    // Call renders
+    renderInfo({
+      Name: info.name,
+      Role: info.role,
+      HeroText: info.heroText,
+      Github: info.github,
+      Linkedin: info.linkedin,
+      Kaggle: info.kaggle,
+      Whatsapp: info.whatsapp
+    });
 
     if (finalExperience.length > 0) renderExperience(finalExperience);
-    if (education.length > 0) renderEducation(education);
-
-    if (finalSkills.length > 0) {
-        if (window.DATA && window.DATA.skillGroups) renderSkillGroups(window.DATA.skillGroups);
-        else renderSkills(finalSkills);
+    if (finalEducation.length > 0) renderEducation(finalEducation);
+    
+    if (finalSkillGroups.length > 0) {
+        renderSkillGroups(finalSkillGroups);
     }
 
     if (finalProjects.length > 0) {
         renderProjects(finalProjects);
         initializeProjectFilters();
-        if (window.DATA && window.DATA.fileTreeData) {
-            const projectsFolder = window.DATA.fileTreeData.find(f => f.id === 'portfolio');
-            if (projectsFolder) {
+        
+        // Dynamically add FEATURED_OPS folder to explorer file tree
+        if (fileTree) {
+            const projectsFolder = fileTree.find(f => f.id === 'portfolio');
+            if (projectsFolder && !fileTree.some(f => f.id === 'featured-ops')) {
                 const featuredProjects = finalProjects.filter(p => p.featured).map(p => ({
                     id: `project-${p.id}`,
                     label: p.title.split(' ')[0],
@@ -199,24 +150,19 @@ async function initializeTacticalData() {
                     icon: 'code',
                     extension: p.technologies.includes('Python') ? 'py' : (p.technologies.includes('React') ? 'tsx' : 'ts')
                 }));
-                window.DATA.fileTreeData.push({ id: 'featured-ops', label: 'FEATURED_OPS', isOpen: true, items: featuredProjects });
+                fileTree.push({ id: 'featured-ops', label: 'FEATURED_OPS', isOpen: true, items: featuredProjects });
             }
         }
     }
-    if (awards.length > 0) renderAwards(awards);
 
-    if (window.DATA) {
-        if (window.DATA.blogPosts) renderBlogs(window.DATA.blogPosts);
-        if (window.DATA.learningItems) renderLearning(window.DATA.learningItems);
-        if (window.DATA.gaming) renderGaming(window.DATA.gaming);
-        if (window.DATA.favoriteMedia) renderMedia(window.DATA.favoriteMedia);
-        if (window.DATA.fileTreeData) renderFileTree(window.DATA.fileTreeData);
-    }
+    if (blogs) renderBlogs(blogs);
+    if (learning) renderLearning(learning);
+    if (gaming) renderGaming(gaming);
+    if (fileTree) renderFileTree(fileTree);
 
-    if (window.TACTICAL_INFO && window.TACTICAL_INFO.Github) fetchGithubRepos(window.TACTICAL_INFO.Github.split('/').pop());
-    else fetchGithubRepos('Sajid-ul-Islam');
-
-    // initAIChat removed — handled by ai-bot.js
+    // Call github fetch
+    const githubUser = info.github ? info.github.split('/').pop() : 'Sajid-ul-Islam';
+    fetchGithubRepos(githubUser);
 
     setTimeout(() => {
         document.querySelectorAll('.skeleton').forEach(el => el.classList.add('fade-out'));
@@ -303,9 +249,9 @@ function renderEducation(data) {
             container.insertAdjacentHTML('beforeend', `
               <div class="timeline-item"><div class="timeline-dot"></div>
                 <div class="resume-item mb-4">
-                  <h3 class="mb-0">${item.Institution}</h3>
-                  <div class="subheading mb-2 text-primary">${item.Degree}</div>
-                  <div class="resume-date"><span>${item.Date}</span></div>
+                  <h3 class="mb-0">${item.Institution || item.institution || ''}</h3>
+                  <div class="subheading mb-2 text-primary">${item.Degree || item.degree || ''}</div>
+                  <div class="resume-date"><span>${item.Date || item.date || ''}</span></div>
                 </div>
               </div>
             `);
