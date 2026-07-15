@@ -9,14 +9,9 @@
 :root {
   color-scheme: light dark;
 
-  /* Sky-blue accent (exactly matching ahmedshamim.com) */
-  --sky-400: oklch(74.6% .16 232.661);
-  --sky-500: oklch(68.5% .169 237.323);
-  --sky-600: oklch(55% .158 241.966);
-
-  /* Accent tokens */
-  --accent-500: light-dark(var(--sky-500), var(--sky-400));
-  --accent-600: light-dark(var(--sky-600), var(--sky-500));
+  /* Accent tokens — derived from palette accent-color for Sketchbook theme */
+  --accent-500: light-dark(var(--accent-color-light), var(--accent-color));
+  --accent-600: light-dark(var(--accent-color), var(--accent-color-light));
 
   /* Background colors */
   --background-color-base: light-dark(oklch(98.5% 0 0), oklch(18.2% 0 0));
@@ -249,9 +244,9 @@ body {
   --text-h: #f3f4f6;
   --bg: #16171d;
   --border: #2e303a;
-  --accent: #c084fc;
-  --accent-bg: rgba(192, 132, 252, 0.15);
-  --accent-border: rgba(192, 132, 252, 0.5);
+  --accent: var(--accent-color);
+  --accent-bg: color-mix(in srgb, var(--accent-color) 15%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent-color) 50%, transparent);
   --shadow: rgba(0,0,0,.4) 0 10px 15px -3px, rgba(0,0,0,.25) 0 4px 6px -2px;
   --sans: var(--font-sans);
   --heading: var(--font-mono);
@@ -263,13 +258,58 @@ body {
   --text-h: #f5e6c8;
   --bg: #0e0c09;
   --border: #3d2f1a;
-  --accent: #ff4d00;
-  --accent-bg: rgba(255,77,0,0.12);
-  --accent-border: rgba(255,77,0,0.4);
+  --accent: var(--accent-color);
+  --accent-bg: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  --accent-border: color-mix(in srgb, var(--accent-color) 40%, transparent);
   --shadow: rgba(0,0,0,.6) 0 10px 15px -3px;
   --sans: var(--font-sans);
   --heading: var(--font-mono);
   --mono: var(--font-mono);
+}
+
+/* ══════════════════════════════════════════════
+   Color Palette Presets — define accent & secondary vars
+   ══════════════════════════════════════════════ */
+:root[data-accent="neon"]  { --accent-color: #22c55e; --accent-color-light: #4ade80; --accent-color-dim: #166534; --accent-secondary: #a855f7; --accent-text: #86efac; --accent-glow: rgba(34,197,94,0.4); }
+:root[data-accent="ember"] { --accent-color: #f97316; --accent-color-light: #fb923c; --accent-color-dim: #c2410c; --accent-secondary: #ef4444; --accent-text: #fdba74; --accent-glow: rgba(249,115,22,0.4); }
+:root[data-accent="ocean"] { --accent-color: #3b82f6; --accent-color-light: #60a5fa; --accent-color-dim: #1d4ed8; --accent-secondary: #14b8a6; --accent-text: #93c5fd; --accent-glow: rgba(59,130,246,0.4); }
+:root[data-accent="royal"] { --accent-color: #8b5cf6; --accent-color-light: #a78bfa; --accent-color-dim: #6d28d9; --accent-secondary: #eab308; --accent-text: #c4b5fd; --accent-glow: rgba(139,92,246,0.4); }
+:root[data-accent="rose"]  { --accent-color: #ec4899; --accent-color-light: #f472b6; --accent-color-dim: #be185d; --accent-secondary: #f43f5e; --accent-text: #f9a8d4; --accent-glow: rgba(236,72,153,0.4); }
+:root[data-accent="mint"]  { --accent-color: #10b981; --accent-color-light: #34d399; --accent-color-dim: #047857; --accent-secondary: #34d399; --accent-text: #6ee7b7; --accent-glow: rgba(16,185,129,0.4); }
+:root[data-accent="aurora"] { --accent-color: #06b6d4; --accent-color-light: #22d3ee; --accent-color-dim: #0891b2; --accent-secondary: #ec4899; --accent-text: #67e8f9; --accent-glow: rgba(6,182,212,0.4); }
+:root[data-accent="sunset"] { --accent-color: #f97316; --accent-color-light: #fb923c; --accent-color-dim: #ea580c; --accent-secondary: #8b5cf6; --accent-text: #fdba74; --accent-glow: rgba(249,115,22,0.4); }
+:root[data-accent="forest"] { --accent-color: #059669; --accent-color-light: #34d399; --accent-color-dim: #047857; --accent-secondary: #65a30d; --accent-text: #6ee7b7; --accent-glow: rgba(5,150,105,0.4); }
+:root[data-accent="frost"]  { --accent-color: #06b6d4; --accent-color-light: #22d3ee; --accent-color-dim: #0891b2; --accent-secondary: #94a3b8; --accent-text: #67e8f9; --accent-glow: rgba(6,182,212,0.4); }
+
+/* ══════════════════════════════════════════════
+   Smooth Theme Transitions (mode / palette switches)
+   ══════════════════════════════════════════════ */
+.theme-transitioning,
+.theme-transitioning body {
+  transition-property: background-color, color, border-color, box-shadow, text-shadow, background;
+  transition-duration: 0.35s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.theme-transitioning * {
+  transition-property: background-color, color, border-color, box-shadow, text-shadow, background, opacity;
+  transition-duration: 0.35s;
+  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ══════════════════════════════════════════════
+   Water Drop View Transition Animation
+   ══════════════════════════════════════════════ */
+::view-transition-old(root) {
+  animation: none;
+  filter: url(#theme-water-warp);
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: none;
+  filter: url(#theme-water-warp);
+  mix-blend-mode: normal;
 }
 
 /* ══════════════════════════════════════════════

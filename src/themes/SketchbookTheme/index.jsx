@@ -1,48 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
+import ProjectModal from '../../components/Shared/ProjectModal';
 
 export default function SketchbookTheme() {
   const data = useData();
-  const toggleBtnRef = useRef(null);
-  const [theme, setTheme] = useState(() =>
-    localStorage.getItem('portfolio_mode') ||
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-  );
-
-  // Apply theme immediately on change
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('portfolio_mode', theme);
-  }, [theme]);
-
-  // ── Self-contained teardrop ripple toggle ──────────────────────────────
-  const handleToggle = useCallback(() => {
-    const btn = toggleBtnRef.current;
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-
-    // Fallback: no View Transitions API or reduced-motion
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!document.startViewTransition || reduced) {
-      setTheme(nextTheme);
-      return;
-    }
-
-    // Set ripple origin from the toggle button's center position
-    if (btn) {
-      const rect = btn.getBoundingClientRect();
-      const cx = Math.round(rect.left + rect.width / 2);
-      const cy = Math.round(rect.top  + rect.height / 2);
-      document.documentElement.style.setProperty('--ripple-x', `${cx}px`);
-      document.documentElement.style.setProperty('--ripple-y', `${cy}px`);
-    }
-
-    // Kick off the View Transition — the CSS `::view-transition-new(root)`
-    // rule picks up --ripple-x/y and plays the ellipse clip-path reveal.
-    const t = document.startViewTransition(() => {
-      setTheme(nextTheme);
-    });
-    t.ready.catch(() => {}); // suppress AbortError on rapid clicks
-  }, [theme]);
+  const [selectedProject, setSelectedProject] = useState(null);
 
   const socialLinks = [
     { href: data.info.github, icon: 'fab fa-github', label: 'GitHub' },
@@ -105,24 +67,8 @@ export default function SketchbookTheme() {
             ))}
           </div>
 
-          {/* Right: theme toggle + CTA */}
+          {/* Right: CTA */}
           <div className="flex items-center gap-2">
-            <button
-              type="button"
-              id="themeToggle"
-              aria-label="Switch theme"
-              className="inline-flex size-9 shrink-0 cursor-pointer items-center justify-center rounded-full bg-neutral-500/10 text-[var(--text-color-muted)] transition-colors hover:bg-neutral-500/20 hover:text-[var(--text-color-strong)]"
-            >
-              {/* Sun — show in dark mode */}
-              <svg className={`size-4 ${theme === 'dark' ? 'block' : 'hidden'}`} fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
-                <path d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z" />
-              </svg>
-              {/* Moon — show in light mode */}
-              <svg className={`size-4 ${theme === 'light' ? 'block' : 'hidden'}`} fill="currentColor" viewBox="0 0 256 256" aria-hidden="true">
-                <path d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z" />
-              </svg>
-            </button>
-
             <div className="hidden items-center gap-2 lg:flex">
               <a href={`mailto:${data.info.email}`} className="shamim-btn shamim-btn-neutral">Email</a>
               <a href={data.info.linkedin} target="_blank" rel="noopener" className="shamim-btn shamim-btn-filled">LinkedIn</a>
@@ -239,7 +185,7 @@ export default function SketchbookTheme() {
                     <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1">
                       <div>
                         <h3 className="sk-item-title">{exp.title}</h3>
-                        <div className="sk-item-meta" style={{ color: 'var(--accent-600)' }}>{exp.company}</div>
+                        <div className="sk-item-meta" style={{ color: 'var(--accent-text)' }}>{exp.company}</div>
                       </div>
                       <div className="sk-item-date">{exp.startDate}{exp.current ? ' – Present' : ''}</div>
                     </div>
@@ -267,11 +213,17 @@ export default function SketchbookTheme() {
 
               <div className="grid sm:grid-cols-2 gap-4" id="projects-container">
                 {data.projects.slice(0, 6).map((proj, idx) => (
-                  <a key={proj.id || idx}
-                    href={proj.liveUrl || proj.githubUrl || '#'}
-                    target="_blank" rel="noopener"
+                  <div key={proj.id || idx}
                     className="sk-box rounded-xl p-5 block transition-colors group"
-                    style={{ backgroundColor: 'var(--background-color-card)' }}
+                    style={{
+                      backgroundColor: 'var(--background-color-card)',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => setSelectedProject(proj)}
+                    onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProject(proj); } }}
+                    tabIndex={0}
+                    role="button"
+                    aria-label={`View case study: ${proj.title}`}
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = 'var(--background-color-card-hover)'}
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = 'var(--background-color-card)'}>
                     <div className="flex items-start justify-between gap-2">
@@ -296,7 +248,13 @@ export default function SketchbookTheme() {
                         ))}
                       </div>
                     )}
-                  </a>
+                    <div className="mt-3 text-[10px] font-mono" style={{ color: 'var(--text-color-muted)' }}>
+                      <span className="inline-flex items-center gap-1 opacity-60">
+                        <i className="fas fa-search-plus" />
+                        VIEW CASE STUDY
+                      </span>
+                    </div>
+                  </div>
                 ))}
               </div>
             </section>
@@ -318,7 +276,7 @@ export default function SketchbookTheme() {
                           {skill.icon?.startsWith('http') ? (
                             <img src={skill.icon} alt={skill.name} className="w-4 h-4 object-contain" />
                           ) : (
-                            <i className={`${skill.icon || 'fas fa-star'} text-xs`} style={{ color: 'var(--accent-600)' }} />
+                            <i className={`${skill.icon || 'fas fa-star'} text-xs`} style={{ color: 'var(--accent-text)' }} />
                           )}
                           {skill.name}
                         </span>
@@ -347,6 +305,11 @@ export default function SketchbookTheme() {
                 ))}
               </div>
             </section>
+
+            {/* Project Case Study Modal */}
+            {selectedProject && (
+              <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+            )}
 
             {/* Footer */}
             <div className="sk-rule-t sk-draw-rule" />

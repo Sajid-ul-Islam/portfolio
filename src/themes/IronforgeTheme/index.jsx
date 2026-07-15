@@ -1,643 +1,448 @@
-import React from 'react';
 import { useData } from '../../context/DataContext';
+import React, { useEffect, useRef, useState } from 'react';
+import ProjectModal from '../../components/Shared/ProjectModal';
+import './IronforgeTheme.css';
 
 export default function IronforgeTheme() {
   const data = useData();
+  const sectionRefs = useRef([]);
+  const [selectedProject, setSelectedProject] = useState(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('forge-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    sectionRefs.current.forEach(ref => {
+      if (ref) observer.observe(ref);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const statItems = [
+    { value: data.experiences?.length || 0, label: 'Years Experience', highlight: false },
+    { value: data.projects?.length || 0, label: 'Projects Completed', highlight: true },
+    { value: data.education?.length || 0, label: 'Academic Milestones', highlight: false },
+    { value: data.skillGroups?.flatMap(g => g.skills || []).length || 0, label: 'Technical Skills', highlight: false },
+  ];
 
   return (
-    <>
-      {/* WARNING: This is auto-generated JSX. Check for any remaining JSX errors. */}
-      
-  <div className="grain" id="grain"></div>
-  
-  
-  <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/50 border-b border-white/5">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
-      <a href="#" className="flex items-center gap-3 group">
-        <div className="w-9 h-9 bg-[var(--accent)] flex items-center justify-center relative">
-          <i className="fas fa-bolt text-black text-base"></i>
-          <div className="absolute -inset-1 border border-[var(--accent)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-        </div>
-        <div>
-          <div className="font-display text-2xl leading-none tracking-wider">SAJID ISLAM</div>
-          <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.3em] mt-0.5">DATA · ANALYTICS</div>
-        </div>
-      </a>
-      <nav className="hidden lg:flex items-center gap-10">
-        <a href="#curriculum" className="nav-link">Projects</a>
-        <a href="#coaches" className="nav-link">Experience</a>
-        <a href="#stories" className="nav-link">Skills</a>
-        <a href="#education" className="nav-link">Education</a>
-        <a href="#booking" className="nav-link">Contact</a>
-      </nav>
-      <div className="flex items-center gap-3">
-        
-        <button className="font-heading text-xs tracking-[0.2em] text-[var(--fg)] border border-[var(--accent)] p-2 hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors" id="theme-toggle" title="Toggle Light/Dark Mode">
-          <i className="fas fa-moon"></i>
-        </button>
-        
-        
-        <div className="hidden sm:flex items-center gap-1 mx-2">
-          <button className="color-swatch rounded-full w-4 h-4 bg-[#22c55e] border-0 cursor-pointer" data-color="green" title="Green"></button>
-          <button className="color-swatch rounded-full w-4 h-4 bg-[#f97316] border-0 cursor-pointer" data-color="orange" title="Orange"></button>
-          <button className="color-swatch rounded-full w-4 h-4 bg-[#eab308] border-0 cursor-pointer" data-color="yellow" title="Yellow"></button>
-          <button className="color-swatch rounded-full w-4 h-4 bg-[#3b82f6] border-0 cursor-pointer" data-color="blue" title="Blue"></button>
-          <button className="color-swatch rounded-full w-4 h-4 bg-[#ef4444] border-0 cursor-pointer" data-color="red" title="Red"></button>
-        </div>
+    <div className="forge-theme">
+      {/* Grain Overlay */}
+      <div className="forge-grain" aria-hidden="true" />
 
-        
-        <div className="relative group">
-          <button className="font-heading text-xs tracking-[0.2em] uppercase text-[var(--fg)] border border-[var(--accent)] px-4 py-2 hover:bg-[var(--accent)] hover:text-[var(--bg)] transition-colors flex items-center gap-2">
-            <i className="fas fa-layer-group"></i> THEMES
-          </button>
-          <div className="absolute right-0 mt-2 w-48 bg-[var(--bg-card)] border border-[var(--accent)] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all flex flex-col z-50 shadow-lg">
-            <a href="theme-tactical.html" className="px-4 py-3 text-xs font-mono text-[var(--fg)] hover:bg-[var(--accent)] hover:text-[var(--bg)]"><i className="fas fa-terminal w-5"></i> Tactical HUD</a>
-            <a href="theme-ironforge.html" className="px-4 py-3 text-xs font-mono text-[var(--fg)] hover:bg-[var(--accent)] hover:text-[var(--bg)]"><i className="fas fa-fire w-5"></i> Ironforge Studio</a>
-            <a href="theme-sketchbook.html" className="px-4 py-3 text-xs font-mono text-[var(--fg)] hover:bg-[var(--accent)] hover:text-[var(--bg)]"><i className="fas fa-pen-nib w-5"></i> Sketchbook Ink</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-  
-  
-  <section className="relative h-screen min-h-[800px] flex items-center bg-black overflow-hidden pt-20" id="hero">
-    
-    <div className="absolute inset-0" id="reelContainer">
-      <div className="reel-frame active">
-        <img src="https://picsum.photos/seed/forgeA/1920/1080.jpg" alt="Data Analysis" />
-      </div>
-      <div className="reel-frame">
-        <img src="https://picsum.photos/seed/forgeB/1920/1080.jpg" alt="Coding workspace" />
-      </div>
-      <div className="reel-frame">
-        <img src="https://picsum.photos/seed/forgeC/1920/1080.jpg" alt="Machine Learning" />
-      </div>
-      <div className="reel-frame">
-        <img src="https://picsum.photos/seed/forgeD/1920/1080.jpg" alt="Dashboard visualizations" />
-      </div>
-      <div className="reel-frame">
-        <img src="https://picsum.photos/seed/forgeE/1920/1080.jpg" alt="Technology" />
-      </div>
-    </div>
-    
-    <div className="hero-overlay"></div>
-    <div className="scan-line"></div>
-    
-    
-    <div className="relative z-10 h-full max-w-[1600px] mx-auto px-6 lg:px-10 flex flex-col justify-end pb-20 pt-32">
-      
-      
-      <div className="absolute top-32 right-6 lg:right-10 flex items-center gap-6 z-20" id="reelControls">
-        <div className="hidden md:flex items-center gap-3 font-mono text-[11px] text-[var(--fg-dim)]">
-          <span className="rec-dot w-2 h-2 bg-[var(--accent)] rounded-full"></span>
-          <span className="tracking-[0.2em]">REEL · LIVE</span>
-        </div>
-        <button id="muteToggle" className="unmute-toggle flex items-center gap-3 px-4 py-2.5 border border-white/20 hover:border-[var(--accent)] bg-black/40 backdrop-blur-sm transition-colors group">
-          <div className="flex items-end gap-[2px] h-4">
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-            <span className="wave-bar"></span>
-          </div>
-          <span className="font-mono text-[10px] tracking-[0.2em] uppercase" id="muteLabel">Muted</span>
-          <i className="fas fa-volume-xmark text-xs text-[var(--muted)] group-hover:text-[var(--accent)]" id="muteIcon"></i>
-        </button>
-      </div>
-      
-      
-      <div className="reveal in-view max-w-5xl">
-        <div className="section-marker mb-6">
-          <span>DATA ANALYST & ML ENGINEER</span>
-        </div>
-        <h1 className="font-display text-[14vw] md:text-[10vw] lg:text-[8.5vw] leading-[0.85] mb-8">
-          <span className="headline-line"><span>DATA DRIVEN.</span></span>
-          <span className="headline-line"><span className="text-stroke">STRATEGIC.</span></span>
-          <span className="headline-line"><span>FORGED BY <span className="text-[var(--accent)]">SAJID ISLAM.</span></span></span>
-        </h1>
-        <p className="max-w-xl text-[var(--fg-dim)] text-base md:text-lg leading-relaxed font-body">
-          Detail-oriented Data Analyst adept at cleaning, analyzing, and visualizing data to drive operational efficiency. Skilled in Python, SQL, and Power BI. One unrelenting standard — <span className="text-[var(--fg)]">your growth</span>.
-        </p>
-      </div>
-      
-      
-      <div className="mt-12 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8">
-        
-        
-        <div className="flex items-center gap-4">
-          <div className="flex -space-x-3">
-            <div className="w-12 h-12 rounded-full border-2 border-[var(--bg)] bg-[var(--accent)] flex items-center justify-center font-display text-base text-[var(--bg)]">4+</div>
-          </div>
-          <div>
-            <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--muted)] uppercase">Experience</div>
-            <div className="font-heading text-sm text-[var(--fg)] tracking-wider">Years of Data Operations</div>
-          </div>
-        </div>
-        
-        
-        <div className="flex items-center gap-6 max-w-md w-full lg:w-auto">
-          <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em]">
-            <span id="chapterNum">01</span> / 05
-          </div>
-          <div className="flex-1 progress-bar">
-            <div className="progress-bar-fill" id="reelProgress"></div>
-          </div>
-          <div className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em]">
-            TRAINING REEL
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    
-    <div className="absolute bottom-0 left-0 right-0 border-t border-white/5 bg-black/60 backdrop-blur-sm py-3 overflow-hidden z-10">
-      <div className="marquee-track font-display text-sm tracking-[0.25em] text-[var(--silver-dim)]">
-        <span className="px-8">DATA ANALYTICS</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">MACHINE LEARNING</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">BUSINESS INTELLIGENCE</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">PYTHON & SQL</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">DATA ANALYTICS</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">MACHINE LEARNING</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">BUSINESS INTELLIGENCE</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">PYTHON & SQL</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">DATA ANALYTICS</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">MACHINE LEARNING</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">BUSINESS INTELLIGENCE</span><span className="text-[var(--accent)]">/</span>
-        <span className="px-8">PYTHON & SQL</span><span className="text-[var(--accent)]">/</span>
-      </div>
-    </div>
-  </section>
-  
-  
-  <section className="border-y border-[var(--border)] bg-[var(--bg-darker)] relative overflow-hidden" id="stats">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10 py-16 lg:py-20">
-      <div className="reveal-stagger grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6">
-        <div className="border-l border-[var(--border-light)] pl-6">
-          <div className="font-display text-6xl md:text-7xl text-[var(--fg)] number-display" data-count="4">0</div>
-          <div className="font-mono text-[11px] text-[var(--muted)] tracking-[0.2em] uppercase mt-2">Years Experience</div>
-        </div>
-        <div className="border-l border-[var(--border-light)] pl-6">
-          <div className="font-display text-6xl md:text-7xl text-[var(--accent)] number-display" data-count="15">0</div>
-          <div className="font-mono text-[11px] text-[var(--muted)] tracking-[0.2em] uppercase mt-2">Projects Completed</div>
-        </div>
-        <div className="border-l border-[var(--border-light)] pl-6">
-          <div className="font-display text-6xl md:text-7xl text-[var(--fg)] number-display" data-count="3">0</div>
-          <div className="font-mono text-[11px] text-[var(--muted)] tracking-[0.2em] uppercase mt-2">Publications</div>
-        </div>
-        <div className="border-l border-[var(--border-light)] pl-6">
-          <div className="font-display text-6xl md:text-7xl text-[var(--fg)] number-display" data-count="10">0</div>
-          <div className="font-mono text-[11px] text-[var(--muted)] tracking-[0.2em] uppercase mt-2">Certifications</div>
-        </div>
-      </div>
-    </div>
-  </section>
-  
-  
-  <section className="relative py-28 lg:py-36" id="curriculum">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
-      
-      <div className="reveal grid lg:grid-cols-12 gap-8 mb-20">
-        <div className="lg:col-span-5">
-          <div className="section-marker mb-6"><span>02 — Projects</span></div>
-          <h2 className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.9]">
-            Complex Data.<br />
-            <span className="text-stroke">Actionable</span><br />
-            <span className="text-[var(--accent)]">Insights.</span>
-          </h2>
-        </div>
-        <div className="lg:col-span-6 lg:col-start-7 flex flex-col justify-end">
-          <p className="text-[var(--fg-dim)] text-lg leading-relaxed mb-6">
-            Explore a selection of my data-driven projects, analytical dashboards, and research publications. Each project is engineered to extract actionable insights from complex datasets.
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <span className="goal-pill active">All Projects</span>
-            <span className="goal-pill">Dashboards</span>
-            <span className="goal-pill">Machine Learning</span>
-            <span className="goal-pill">Research</span>
-          </div>
-        </div>
-      </div>
-      
-      
-      <div className="reveal-stagger grid md:grid-cols-3 gap-6 lg:gap-8" id="projects-container">
-        
-        
-        <article className="program-card info-card notch-corner group flex flex-col">
-          <div className="relative h-48 overflow-hidden bg-[var(--bg-card)] flex flex-col justify-center items-center border-b border-[var(--border-light)]">
-            <i className="fas fa-layer-group text-4xl text-[var(--accent)] mb-2 group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-lg text-[var(--fg)] tracking-wider">Streamlit App Hub</h4>
-            <div className="absolute top-4 left-4 font-mono text-[10px] text-[var(--accent)] tracking-[0.2em]">01 / PORTFOLIO</div>
-          </div>
-          <div className="p-7 flex flex-col flex-1">
-            <h3 className="font-display text-3xl mb-3">Streamlit App Hub</h3>
-            <p className="text-[var(--fg-dim)] text-sm leading-relaxed mb-6 flex-1">
-              A centralized command center for 10+ operational data apps, including inventory trackers, sales dashboards, and automation tools.
-            </p>
-            <a href="https://share.streamlit.io/user/saajiidi" target="_blank" className="flex items-center justify-between font-heading text-sm tracking-[0.15em] uppercase link-underline mt-auto">
-              <span>View App Hub</span>
-              <i className="fas fa-arrow-right text-[var(--accent)]"></i>
-            </a>
-          </div>
-        </article>
-        
-        
-        <article className="program-card info-card notch-corner group flex flex-col">
-          <div className="relative h-48 overflow-hidden bg-[var(--bg-card)] flex flex-col justify-center items-center border-b border-[var(--border-light)]">
-            <i className="fas fa-chart-line text-4xl text-[var(--accent)] mb-2 group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-lg text-[var(--fg)] tracking-wider">Global Economics</h4>
-            <div className="absolute top-4 left-4 font-mono text-[10px] text-[var(--accent)] tracking-[0.2em]">02 / DASHBOARD</div>
-          </div>
-          <div className="p-7 flex flex-col flex-1">
-            <h3 className="font-display text-3xl mb-3">Global Economics Dashboard</h3>
-            <p className="text-[var(--fg-dim)] text-sm leading-relaxed mb-6 flex-1">
-              An interactive Streamlit web application visualizing global economic indicators, providing strategic data analysis on worldwide market trends.
-            </p>
-            <a href="https://global-economics.streamlit.app" target="_blank" className="flex items-center justify-between font-heading text-sm tracking-[0.15em] uppercase link-underline mt-auto">
-              <span>View Dashboard</span>
-              <i className="fas fa-arrow-right text-[var(--accent)]"></i>
-            </a>
-          </div>
-        </article>
-        
-        
-        <article className="program-card info-card notch-corner group flex flex-col">
-          <div className="relative h-48 overflow-hidden bg-[var(--bg-card)] flex flex-col justify-center items-center border-b border-[var(--border-light)]">
-            <i className="fas fa-file-alt text-4xl text-[var(--accent)] mb-2 group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-lg text-[var(--fg)] tracking-wider">Research Paper</h4>
-            <div className="absolute top-4 left-4 font-mono text-[10px] text-[var(--accent)] tracking-[0.2em]">03 / PUBLICATION</div>
-          </div>
-          <div className="p-7 flex flex-col flex-1">
-            <h3 className="font-display text-3xl mb-3">Data Mining Techniques</h3>
-            <p className="text-[var(--fg-dim)] text-sm leading-relaxed mb-6 flex-1">
-              Conducted in-depth analysis of data mining techniques, categorizing self-narrated stories into distinct themes.
-            </p>
-            <a href="https://ict4sd.org/link/proceedings/ICT4SD-2020-VOL2.pdf" target="_blank" className="flex items-center justify-between font-heading text-sm tracking-[0.15em] uppercase link-underline mt-auto">
-              <span>View Publication</span>
-              <i className="fas fa-arrow-right text-[var(--accent)]"></i>
-            </a>
-          </div>
-        </article>
-        
-      </div>
-    </div>
-  </section>
-  
-  
-  <section className="relative py-28 lg:py-36 border-t border-[var(--border)] bg-[var(--bg-darker)]" id="coaches">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
-      
-      <div className="reveal grid lg:grid-cols-12 gap-8 mb-20">
-        <div className="lg:col-span-7">
-          <div className="section-marker mb-6"><span>03 — Experience</span></div>
-          <h2 className="font-display text-6xl md:text-7xl lg:text-8xl leading-[0.9]">
-            Data that <span className="text-[var(--accent)]">drives</span><br />
-            decisions that <span className="text-stroke">transform.</span>
-          </h2>
-        </div>
-        <div className="lg:col-span-4 lg:col-start-9 flex flex-col justify-end">
-          <p className="text-[var(--fg-dim)] text-base leading-relaxed">
-            A track record of leveraging data analytics and business intelligence to optimize operations, automate workflows, and drive strategic growth across organizations.
-          </p>
-        </div>
-      </div>
-      
-      
-      <div className="reveal-stagger grid sm:grid-cols-1 lg:grid-cols-3 gap-6" id="coaches-grid">
-        {data.experiences.map((exp, idx) => (
-          <div className="flip-card" key={idx}>
-            <div className="flip-card-inner">
-              <div className="flip-face flip-front info-card notch-corner bg-[var(--bg)] flex items-center justify-center border border-[var(--border)] group hover:border-[var(--accent)] transition-colors">
-                <div className="text-center p-8">
-                  <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--muted)] uppercase">Experience</div>
-                  <h3 className="font-display text-3xl my-3">{exp.title}</h3>
-                  <div className="text-[var(--accent)] font-heading tracking-widest text-sm uppercase">{exp.company}</div>
-                  <div className="font-mono text-[11px] text-[var(--muted)] tracking-[0.2em] uppercase mt-2">{exp.date}</div>
-                </div>
+      {/* Header */}
+      <header className="forge-header">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <a href="#hero" className="forge-logo no-underline">
+            <div className="forge-logo-icon">
+              <i className="fas fa-bolt" />
+            </div>
+            <div className="hidden sm:block">
+              <div className="font-display text-xl leading-none tracking-wider text-[var(--forge-fg)]">
+                {data.info.name.split(' ')[0]}
               </div>
-              <div className="flip-face flip-back info-card p-7 flex flex-col bg-[var(--bg-card)]">
-                <div className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-4">/ Role Details</div>
-                <h3 className="font-display text-2xl mb-5">Key Contributions</h3>
-                <ul className="space-y-2.5 text-sm mb-6 flex-1 text-[var(--fg-dim)]">
-                  {exp.highlights.map((h, i) => (
-                    <li key={i} className="flex items-start gap-3"><i className="fas fa-circle-check text-[var(--accent)] text-xs mt-1"></i><span className="leading-snug">{h}</span></li>
-                  ))}
-                </ul>
-                <div className="mt-auto pt-5 border-t border-[var(--border-light)]">
-                  <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em] uppercase mb-2">Location</div>
-                  <div className="font-display text-2xl text-[var(--accent)]">{exp.location || 'DHAKA, BD'}</div>
-                </div>
+              <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.3em] mt-0.5">
+                DATA · ANALYTICS
               </div>
             </div>
+          </a>
+
+          <nav className="hidden lg:flex items-center gap-8">
+            {['Projects', 'Experience', 'Skills', 'Education', 'Contact'].map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`}>
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          <div className="flex items-center gap-4">
+            <a href={`mailto:${data.info.email}`} className="forge-btn forge-btn-primary text-xs">
+              <i className="fas fa-bolt" /> HIRE ME
+            </a>
           </div>
-        ))}
-      </div>
-    </div>
-    
-    
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10 mt-10">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fab fa-python text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">Python</h4>
         </div>
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fab fa-r-project text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">R</h4>
+      </header>
+
+      {/* Hero */}
+      <section className="forge-hero" id="hero">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 lg:px-10 flex flex-col justify-center min-h-[90vh] pb-20 pt-32">
+          {/* Top right social + marker */}
+          <div className="absolute top-28 right-6 lg:right-10 flex items-center gap-3 z-20">
+            <div className="flex items-center gap-2 font-mono text-[10px] text-[var(--forge-fg-dim)]">
+              <span className="w-2 h-2 bg-[var(--forge-orange)] rounded-full forge-pulse" />
+              <span className="tracking-[0.2em]">AVAILABLE</span>
+            </div>
+          </div>
+
+          <div className="max-w-4xl">
+            <div className="forge-section-marker forge-fade-up">
+              DATA ANALYST & ML ENGINEER
+            </div>
+            <h1 className="forge-fade-up forge-delay-1">
+              <span className="forge-headline-line"><span>DATA DRIVEN.</span></span>
+              <span className="forge-headline-line"><span className="stroke">STRATEGIC.</span></span>
+              <span className="forge-headline-line"><span>FORGED BY <span className="highlight">{data.info.name.toUpperCase()}.</span></span></span>
+            </h1>
+            <p className="forge-fade-up forge-delay-2 mt-6">
+              {data.info.heroText || `${data.info.role} — turning complex datasets into strategic growth. Based in Bangladesh.`}
+            </p>
+
+            <div className="flex flex-wrap gap-3 mt-8 forge-fade-up forge-delay-3">
+              <a href="#experience" className="forge-btn forge-btn-primary">
+                <i className="fas fa-arrow-right" /> VIEW WORK
+              </a>
+              <a href={`mailto:${data.info.email}`} className="forge-btn">
+                <i className="fas fa-envelope" /> CONTACT
+              </a>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex items-center gap-4 mt-8 forge-fade-up forge-delay-4">
+              {data.info.github && (
+                <a href={data.info.github} target="_blank" rel="noopener" className="w-10 h-10 border border-[var(--forge-border-light)] hover:border-[var(--forge-orange)] hover:text-[var(--forge-orange)] transition-all flex items-center justify-center text-[var(--forge-fg-dim)]" title="GitHub">
+                  <i className="fab fa-github text-sm" />
+                </a>
+              )}
+              {data.info.linkedin && (
+                <a href={data.info.linkedin} target="_blank" rel="noopener" className="w-10 h-10 border border-[var(--forge-border-light)] hover:border-[var(--forge-orange)] hover:text-[var(--forge-orange)] transition-all flex items-center justify-center text-[var(--forge-fg-dim)]" title="LinkedIn">
+                  <i className="fab fa-linkedin-in text-sm" />
+                </a>
+              )}
+              {data.info.kaggle && (
+                <a href={data.info.kaggle} target="_blank" rel="noopener" className="w-10 h-10 border border-[var(--forge-border-light)] hover:border-[var(--forge-orange)] hover:text-[var(--forge-orange)] transition-all flex items-center justify-center text-[var(--forge-fg-dim)]" title="Kaggle">
+                  <i className="fab fa-kaggle text-sm" />
+                </a>
+              )}
+            </div>
+          </div>
         </div>
 
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fas fa-database text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">SQL</h4>
+        {/* Marquee bar */}
+        <div className="forge-marquee-bar">
+          <div className="forge-marquee">
+            <span>DATA ANALYTICS</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>MACHINE LEARNING</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>BUSINESS INTELLIGENCE</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>PYTHON & SQL</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>DATA ANALYTICS</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>MACHINE LEARNING</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>BUSINESS INTELLIGENCE</span><span className="text-[var(--forge-orange)]">/</span>
+            <span>PYTHON & SQL</span><span className="text-[var(--forge-orange)]">/</span>
+          </div>
         </div>
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fas fa-brain text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">Machine Learning</h4>
-        </div>
+      </section>
 
+      {/* Stats */}
+      <section className="forge-stats" ref={el => sectionRefs.current[0] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6">
+            {statItems.map((stat, idx) => (
+              <div className="forge-stat forge-fade-up" key={idx} style={{ animationDelay: `${idx * 0.1}s` }}>
+                <div className={`forge-stat-value ${stat.highlight ? 'highlight' : ''}`}>
+                  {stat.value}
+                </div>
+                <div className="forge-stat-label">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fas fa-chart-line text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">Data Analytics</h4>
-        </div>
-        
-        <div className="info-card p-6 flex flex-col items-center justify-center text-center gap-4 group border border-transparent hover:border-[var(--accent)] transition-colors">
-            <i className="fas fa-network-wired text-5xl text-[var(--accent)] group-hover:scale-110 transition-transform"></i>
-            <h4 className="font-heading text-xl text-[var(--fg)] tracking-wider">Agentic RAG</h4>
-        </div>
-      </div>
-    </div>
-  </section>
-      
-  <section className="relative py-28 lg:py-36 border-t border-[var(--border)] bg-[var(--bg-darker)]" id="education">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
-      
-      <div className="reveal grid lg:grid-cols-12 gap-8 mb-16">
-        <div className="lg:col-span-8">
-          <div className="section-marker mb-6"><span>05 — Education</span></div>
-          <h2 className="font-display text-6xl md:text-7xl lg:text-[7rem] leading-[0.9]">
-            Continuous <span className="text-[var(--accent)]">Learning.</span><br />
-            Academic <span className="text-stroke">Excellence.</span>
+      {/* Projects */}
+      <section className="forge-section" id="projects" ref={el => sectionRefs.current[1] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="forge-section-marker forge-fade-up">01 — Projects</div>
+          <h2 className="forge-fade-up forge-delay-1">
+            Complex Data.<br />
+            <span className="stroke">Actionable</span>{' '}
+            <span className="highlight">Insights.</span>
           </h2>
-        </div>
-      </div>
-      
-      <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-        
-        
-        <div className="lg:col-span-7 reveal">
-          <div className="booking-frame p-8 lg:p-12 h-full flex flex-col justify-center bg-[var(--bg-card)]">
-            <div className="font-mono text-[11px] text-[var(--accent)] tracking-[0.2em] uppercase mb-8">// Academic Background</div>
-            
-            <div className="space-y-8" id="education-list">
-              {data.education.map((edu, idx) => (
-                <div className={"flex gap-6 relative group " + (idx !== data.education.length - 1 ? 'border-b border-[var(--border-light)] pb-6' : '')} key={idx}>
-                  <div className="w-12 h-12 bg-[var(--bg)] border border-[var(--border-light)] group-hover:border-[var(--accent)] transition-colors flex items-center justify-center shrink-0">
-                    <i className={"fas text-[var(--accent)] text-xl " + (edu.degree.includes('PGD') ? 'fa-graduation-cap' : edu.degree.includes('BSc') ? 'fa-university' : 'fa-school')}></i>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {data.projects?.filter(p => p.featured).slice(0, 6).map((proj, idx) => (
+              <div className="forge-project-card forge-notch forge-fade-up" key={proj.id || idx}
+                style={{ animationDelay: `${0.2 + idx * 0.08}s`, cursor: 'pointer' }}
+                onClick={() => setSelectedProject(proj)}
+                onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelectedProject(proj); } }}
+                tabIndex={0}
+                role="button"
+                aria-label={`View case study: ${proj.title}`}
+              >
+                <h3>{proj.title}</h3>
+                <p>{proj.description}</p>
+                {proj.technologies?.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {proj.technologies.slice(0, 4).map((t, i) => (
+                      <span key={i} className="font-mono text-[10px] text-[var(--forge-orange)] border border-[var(--forge-border)] px-2 py-1">
+                        {t}
+                      </span>
+                    ))}
                   </div>
-                  <div>
-                    <h3 className="font-display text-3xl mb-1">{edu.degree}</h3>
-                    <div className="font-heading text-sm text-[var(--fg-dim)] tracking-wider mb-2">{edu.institution}</div>
-                    <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.15em] uppercase">{edu.date}</div>
+                )}
+                <div className="mt-4 pt-4 border-t border-[var(--forge-border)] flex items-center justify-between">
+                  <span className="text-xs font-mono text-[var(--forge-orange)]/60 flex items-center gap-1.5">
+                    <i className="fas fa-search-plus" />
+                    VIEW CASE STUDY
+                  </span>
+                  {proj.liveUrl && (
+                    <a href={proj.liveUrl} target="_blank" rel="noopener"
+                      onClick={(e) => e.stopPropagation()}
+                      className="forge-link text-sm flex items-center gap-2">
+                      <span>View Project</span>
+                      <i className="fas fa-arrow-right text-[var(--forge-orange)] text-xs" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Experience */}
+      <section className="forge-section forge-section-dark" id="experience" ref={el => sectionRefs.current[2] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="forge-section-marker forge-fade-up">02 — Experience</div>
+          <h2 className="forge-fade-up forge-delay-1">
+            Data that <span className="highlight">drives</span><br />
+            decisions that <span className="stroke">transform.</span>
+          </h2>
+
+          <div className="grid sm:grid-cols-1 lg:grid-cols-3 gap-6">
+            {data.experiences?.map((exp, idx) => (
+              <div className="forge-flip-card forge-fade-up" key={idx} style={{ animationDelay: `${0.2 + idx * 0.1}s` }}>
+                <div className="forge-flip-inner">
+                  <div className="forge-flip-front forge-notch">
+                    <div className="font-mono text-[10px] tracking-[0.2em] text-[var(--forge-muted)] uppercase mb-4">
+                      Experience
+                    </div>
+                    <h3 className="font-display text-3xl text-[var(--forge-fg)] mb-3">{exp.title}</h3>
+                    <div className="text-[var(--forge-orange)] font-semibold tracking-wider text-sm uppercase">{exp.company}</div>
+                    <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.2em] uppercase mt-4">{exp.startDate} — {exp.current ? 'Present' : exp.endDate}</div>
+                    <div className="text-xs text-[var(--forge-fg-dim)] mt-2">{exp.location || 'Dhaka, BD'}</div>
+                  </div>
+                  <div className="forge-flip-back forge-notch">
+                    <div className="font-mono text-[10px] text-[var(--forge-orange)] tracking-[0.2em] uppercase mb-4">/ Role Details</div>
+                    <h3 className="text-xl font-bold text-[var(--forge-fg)] mb-4">Key Contributions</h3>
+                    <ul className="space-y-2 text-sm text-[var(--forge-fg-dim)]">
+                      {exp.highlights?.map((h, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <i className="fas fa-circle-check text-[var(--forge-orange)] text-xs mt-1" />
+                          <span>{h}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tech Stack Icons */}
+          {data.skillGroups?.length > 0 && (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12">
+              {data.skillGroups?.slice(0, 4).map((group, idx) => (
+                <div className="forge-icon-box forge-fade-up" key={idx} style={{ animationDelay: `${0.3 + idx * 0.08}s` }}>
+                  <i className={`fas ${['fa-brain', 'fa-chart-line', 'fa-code', 'fa-database'][idx]}`} />
+                  <span>{group.name}</span>
+                  <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-wider">
+                    {group.skills?.length} skills
                   </div>
                 </div>
               ))}
             </div>
-          </div>
+          )}
         </div>
-        
-        
-        <div className="lg:col-span-5 reveal" >
-          <div className="space-y-6 h-full">
-            <div className="info-card p-7 h-full flex flex-col justify-center text-center">
-              <i className="fas fa-award text-6xl text-[var(--accent)] mb-6 mx-auto"></i>
-              <h4 className="font-display text-4xl mb-4">AWARDS & RECOGNITION</h4>
-              <p className="text-[var(--fg-dim)] text-base leading-relaxed mb-6">
-                Recognized for academic excellence and outstanding performance in data science and analytics competitions.
-              </p>
+      </section>
+
+      {/* Skills */}
+      <section className="forge-section" id="skills" ref={el => sectionRefs.current[3] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="forge-section-marker forge-fade-up">03 — Skills</div>
+          <h2 className="forge-fade-up forge-delay-1">
+            Technical <span className="highlight">Proficiency.</span><br />
+            Continuous <span className="stroke">Growth.</span>
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-10">
+            <div className="forge-fade-up forge-delay-2">
+              {data.skillGroups?.map((group, gIdx) => (
+                <div key={gIdx} className="mb-8">
+                  <h3 className="font-mono text-xs tracking-wider uppercase text-[var(--forge-orange)] mb-3">{group.name}</h3>
+                  <div className="grid grid-cols-2 gap-2">
+                    {group.skills?.map((skill, sIdx) => (
+                      <div key={sIdx}
+                        className="flex items-center gap-2 p-2 border border-[var(--forge-border)] hover:border-[var(--forge-orange-dim)] transition-colors">
+                        <i className="fas fa-cog text-[var(--forge-orange)] text-[10px]" />
+                        <span className="text-sm text-[var(--forge-fg-dim)]">{skill.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="forge-fade-up forge-delay-3">
+              <h3 className="font-mono text-xs tracking-wider uppercase text-[var(--forge-orange)] mb-3">Proficiency Levels</h3>
+              <div className="space-y-5">
+                {data.skillGroups?.flatMap(g => g.skills || []).slice(0, 8).map((skill, idx) => (
+                  <div key={idx}>
+                    <div className="flex justify-between text-sm mb-1">
+                      <span className="text-[var(--forge-fg-dim)]">{skill.name}</span>
+                      <span className="text-[var(--forge-orange)] font-mono text-xs">{skill.level}%</span>
+                    </div>
+                    <div className="h-[3px] bg-[var(--forge-bg-darker)]">
+                      <div className="h-full bg-[var(--forge-orange)] transition-all duration-1000"
+                        style={{ width: `${skill.level}%`, boxShadow: '0 0 8px rgba(255, 77, 0, 0.4)' }} />
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>
-        
-      </div>
-    </div>
-  </section>
-  
-  
-  <section className="relative py-28 lg:py-36 border-t border-[var(--border)] bg-[var(--bg-darker)]" id="booking">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
-      
-      <div className="reveal grid lg:grid-cols-12 gap-8 mb-16">
-        <div className="lg:col-span-8">
-          <div className="section-marker mb-6"><span>06 — Begin the Process</span></div>
-          <h2 className="font-display text-6xl md:text-7xl lg:text-[7rem] leading-[0.9]">
-            READY TO COLLABORATE?<br />
-            <span className="text-stroke">GET IN</span> <span className="text-[var(--accent)]">TOUCH.</span>
+      </section>
+
+      {/* Education */}
+      <section className="forge-section forge-section-dark" id="education" ref={el => sectionRefs.current[4] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="forge-section-marker forge-fade-up">04 — Education</div>
+          <h2 className="forge-fade-up forge-delay-1">
+            Continuous <span className="highlight">Learning.</span><br />
+            Academic <span className="stroke">Excellence.</span>
           </h2>
-        </div>
-      </div>
-      
-      <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
-        
-        
-        <div className="lg:col-span-7 reveal">
-          <div className="booking-frame p-8 lg:p-12">
-            <div className="font-mono text-[11px] text-[var(--accent)] tracking-[0.2em] uppercase mb-3">// Contact Me</div>
-            <h3 className="font-display text-4xl mb-2">LET'S BUILD SOMETHING</h3>
-            <p className="text-[var(--fg-dim)] text-sm mb-8">Available for data analysis and development projects.</p>
-            
-            <form id="bookingForm" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em] uppercase">Full Name</label>
-                  <input type="text" className="form-input" placeholder="Enter your name" required />
-                </div>
-                <div>
-                  <label className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em] uppercase">Phone</label>
-                  <input type="tel" className="form-input" placeholder="+1 555 000 0000" required />
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {data.education?.map((edu, idx) => (
+              <div className="forge-project-card forge-notch forge-fade-up" key={edu.id || idx}
+                style={{ animationDelay: `${0.2 + idx * 0.1}s` }}>
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[var(--forge-bg-darker)] border border-[var(--forge-border-light)] flex items-center justify-center shrink-0">
+                    <i className="fas fa-graduation-cap text-[var(--forge-orange)] text-xl" />
+                  </div>
+                  <div>
+                    <h3 className="font-display text-2xl mb-1">{edu.degree}</h3>
+                    <div className="font-mono text-xs text-[var(--forge-fg-dim)] mb-2">{edu.institution}</div>
+                    <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.15em] uppercase">{edu.date}</div>
+                    {edu.location && (
+                      <div className="font-mono text-[10px] text-[var(--forge-muted)] mt-1">{edu.location}</div>
+                    )}
+                  </div>
                 </div>
               </div>
-              
-              <div>
-                <label className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em] uppercase">Email</label>
-                <input type="email" className="form-input" placeholder="you@email.com" required />
-              </div>
-              
-              <div>
-                <label className="font-mono text-[10px] text-[var(--muted)] tracking-[0.2em] uppercase block mb-3">Project Type</label>
-                <div className="flex flex-wrap gap-2" id="goalSelector">
-                  <span className="goal-pill active" data-goal="analysis">Data Analysis</span>
-                  <span className="goal-pill" data-goal="webapp">Web App Development</span>
-                  <span className="goal-pill" data-goal="dashboard">Power BI Dashboard</span>
-                  <span className="goal-pill" data-goal="automation">Automation Script</span>
-                  <span className="goal-pill" data-goal="other">Other</span>
-                </div>
-              </div>
-              
-              <button type="submit" className="pulse-btn w-full bg-[var(--accent)] text-black py-5 font-display text-2xl tracking-wider hover:bg-[var(--accent-bright)] transition-colors flex items-center justify-center gap-4 mt-4">
-                <span>SEND MESSAGE</span>
-                <i className="fas fa-arrow-right"></i>
-              </button>
-              
-              <p className="text-center font-mono text-[10px] text-[var(--muted)] tracking-[0.15em] uppercase">
-                Response within 24 hours
-              </p>
-            </form>
+            ))}
           </div>
         </div>
-        
-        
-        <div className="lg:col-span-5 reveal" >
-          <div className="space-y-6">
-            
-            <div className="info-card p-7">
-              <div className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-2">/ Location</div>
-              <h4 className="font-display text-2xl mb-3">DHAKA, BANGLADESH</h4>
-              <p className="text-[var(--fg-dim)] text-sm leading-relaxed mb-4">
-                Available for local opportunities and global remote work.
+      </section>
+
+      {/* Contact */}
+      <section className="forge-section" id="contact" ref={el => sectionRefs.current[5] = el}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="forge-section-marker forge-fade-up">05 — Connect</div>
+          <h2 className="forge-fade-up forge-delay-1">
+            Ready to <span className="highlight">collaborate?</span><br />
+            Get in <span className="stroke">touch.</span>
+          </h2>
+
+          <div className="grid md:grid-cols-2 gap-8 forge-fade-up forge-delay-2">
+            <div className="forge-project-card forge-notch p-8">
+              <div className="font-mono text-[10px] text-[var(--forge-orange)] tracking-[0.2em] uppercase mb-4">/ Contact</div>
+              <div className="space-y-4">
+                {data.info.email && (
+                  <div className="flex items-center justify-between p-4 border border-[var(--forge-border)] hover:border-[var(--forge-orange-dim)] transition-colors">
+                    <div>
+                      <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-wider uppercase">Email</div>
+                      <div className="font-mono text-sm text-[var(--forge-fg-dim)] mt-1">{data.info.email}</div>
+                    </div>
+                    <a href={`mailto:${data.info.email}`} className="text-[var(--forge-orange)] hover:text-[var(--forge-orange-light)]">
+                      <i className="fas fa-arrow-right" />
+                    </a>
+                  </div>
+                )}
+                {data.info.whatsapp && (
+                  <div className="flex items-center justify-between p-4 border border-[var(--forge-border)] hover:border-[var(--forge-orange-dim)] transition-colors">
+                    <div>
+                      <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-wider uppercase">Phone</div>
+                      <div className="font-mono text-sm text-[var(--forge-fg-dim)] mt-1">{data.info.whatsapp}</div>
+                    </div>
+                    <a href={`https://wa.me/${data.info.whatsapp.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener"
+                      className="text-[var(--forge-orange)] hover:text-[var(--forge-orange-light)]">
+                      <i className="fab fa-whatsapp" />
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="forge-project-card forge-notch p-8">
+              <div className="font-mono text-[10px] text-[var(--forge-orange)] tracking-[0.2em] uppercase mb-4">/ Location</div>
+              <div className="text-2xl font-bold text-[var(--forge-fg)] mb-3">DHAKA, BANGLADESH</div>
+              <p className="text-[var(--forge-fg-dim)] text-sm leading-relaxed mb-6">
+                Available for local opportunities and global remote collaboration.
               </p>
-              <div className="flex items-center gap-3 font-mono text-[11px] text-[var(--silver)]">
-                <i className="fas fa-globe text-[var(--accent)]"></i>
+              <div className="flex items-center gap-3 font-mono text-xs text-[var(--forge-muted)]">
+                <i className="fas fa-globe text-[var(--forge-orange)]" />
                 <span>REMOTE / ON-SITE</span>
               </div>
             </div>
-            
-            <div className="info-card p-7">
-              <div className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-2">/ Direct Contact</div>
-              <h4 className="font-display text-2xl mb-3">CONTACT</h4>
-              <div className="space-y-2.5 text-sm">
-                <a href="tel:+8801824526054" className="flex items-center gap-3 hover:text-[var(--accent)] transition-colors">
-                  <i className="fas fa-phone text-[var(--accent)] w-4"></i>
-                  <span className="font-mono">+880 182-452-6054</span>
-                </a>
-                <a href="mailto:sajid.islam.chowdhury@gmail.com" className="flex items-center gap-3 hover:text-[var(--accent)] transition-colors">
-                  <i className="fas fa-envelope text-[var(--accent)] w-4"></i>
-                  <span className="font-mono">sajid.islam.chowdhury@gmail.com</span>
-                </a>
-              </div>
-            </div>
-            
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-  
-  
-  <footer className="border-t border-[var(--border)] bg-black py-16 relative overflow-hidden">
-    <div className="max-w-[1600px] mx-auto px-6 lg:px-10">
-      
-      <div className="font-display text-[18vw] md:text-[14vw] leading-none text-stroke opacity-30 absolute bottom-0 left-0 right-0 text-center pointer-events-none select-none">
-        PORTFOLIO
-      </div>
-      
-      <div className="relative grid md:grid-cols-12 gap-10 mb-12">
-        <div className="md:col-span-5">
-          <div className="flex items-center gap-3 mb-5">
-            <div className="w-10 h-10 bg-[var(--accent)] flex items-center justify-center">
-              <i className="fas fa-bolt text-black"></i>
+      </section>
+
+      {/* Project Case Study Modal */}
+      {selectedProject && (
+        <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+      )}
+
+      {/* Footer */}
+      <footer className="forge-footer">
+        <div className="forge-footer-watermark">PORTFOLIO</div>
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 bg-[var(--forge-orange)] flex items-center justify-center">
+              <i className="fas fa-bolt text-black" />
             </div>
             <div>
-              <div className="font-display text-2xl leading-none tracking-wider">SAJID ISLAM</div>
-              <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.3em] mt-0.5">EST. 2020 · BD</div>
+              <div className="font-display text-xl leading-none tracking-wider text-[var(--forge-fg)]">
+                {data.info.name}
+              </div>
+              <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.3em] mt-0.5">
+                EST. 2020 · BD
+              </div>
             </div>
           </div>
-          <p className="text-[var(--fg-dim)] text-sm leading-relaxed max-w-md mb-6">
-            Data Analyst and Machine Learning Engineer passionate about transforming data into actionable insights and robust automation tools.
+          <p className="text-[var(--forge-fg-dim)] text-sm max-w-md mb-6">
+            {data.info.role} — passionate about turning complex datasets into actionable insights.
           </p>
           <div className="flex gap-3">
-            <a href="https://linkedin.com/in/sajid-ul-islam" target="_blank" className="w-10 h-10 border border-[var(--border-light)] hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-all flex items-center justify-center">
-              <i className="fab fa-linkedin-in text-sm"></i>
-            </a>
-            <a href="https://github.com/Sajid-ul-Islam" target="_blank" className="w-10 h-10 border border-[var(--border-light)] hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-all flex items-center justify-center" title="GitHub">
-              <i className="fab fa-github text-sm"></i>
-            </a>
-            <a href="https://huggingface.co/Sajid-ul-Islam" target="_blank" className="w-10 h-10 border border-[var(--border-light)] hover:border-[var(--accent)] hover:bg-[var(--accent)] hover:text-black transition-all flex items-center justify-center" title="Hugging Face">
-              <i className="fas fa-robot text-sm"></i>
-            </a>
+            {data.info.linkedin && (
+              <a href={data.info.linkedin} target="_blank" rel="noopener"
+                className="w-10 h-10 border border-[var(--forge-border-light)] hover:border-[var(--forge-orange)] hover:bg-[var(--forge-orange)] hover:text-black transition-all flex items-center justify-center text-[var(--forge-fg-dim)]">
+                <i className="fab fa-linkedin-in text-sm" />
+              </a>
+            )}
+            {data.info.github && (
+              <a href={data.info.github} target="_blank" rel="noopener"
+                className="w-10 h-10 border border-[var(--forge-border-light)] hover:border-[var(--forge-orange)] hover:bg-[var(--forge-orange)] hover:text-black transition-all flex items-center justify-center text-[var(--forge-fg-dim)]">
+                <i className="fab fa-github text-sm" />
+              </a>
+            )}
+          </div>
+          <div className="border-t border-[var(--forge-border)] mt-8 pt-6 flex flex-col md:flex-row justify-between gap-4 text-[var(--forge-muted)] font-mono text-[10px] tracking-[0.15em] uppercase">
+            <div>© {new Date().getFullYear()} {data.info.name.toUpperCase()}</div>
           </div>
         </div>
-        
-        <div className="md:col-span-2">
-          <h5 className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-4">Focus Areas</h5>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#curriculum" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Dashboard Design</a></li>
-            <li><a href="#curriculum" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Data Mining</a></li>
-            <li><a href="#curriculum" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Automation</a></li>
-            <li><a href="#curriculum" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">ML Models</a></li>
-          </ul>
-        </div>
-        
-        <div className="md:col-span-2">
-          <h5 className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-4">Portfolio</h5>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#curriculum" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Projects</a></li>
-            <li><a href="#coaches" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Experience</a></li>
-            <li><a href="#stories" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Skills</a></li>
-            <li><a href="#education" className="text-[var(--fg-dim)] hover:text-[var(--fg)] link-underline">Education</a></li>
-          </ul>
-        </div>
-        
-        <div className="md:col-span-3">
-          <h5 className="font-mono text-[10px] text-[var(--accent)] tracking-[0.2em] uppercase mb-4">Let's Connect</h5>
-          <p className="text-[var(--fg-dim)] text-xs mb-4 leading-relaxed">Get in touch for collaborations and opportunities.</p>
-          <form className="flex border border-[var(--border-light)] focus-within:border-[var(--accent)] transition-colors">
-            <input type="email" placeholder="email@address.com" className="flex-1 bg-transparent px-3 py-2.5 text-sm text-[var(--fg)] outline-none placeholder:text-[var(--muted)]" />
-            <button type="submit" className="px-4 bg-[var(--accent)] text-black hover:bg-[var(--accent-bright)] transition-colors">
-              <i className="fas fa-arrow-right text-xs"></i>
-            </button>
-          </form>
-        </div>
-      </div>
-      
-      <div className="relative border-t border-[var(--border)] pt-6 flex flex-col md:flex-row justify-between gap-4 text-[var(--muted)] font-mono text-[11px] tracking-[0.15em] uppercase">
-        <div>© 2024 SAJID-UL-ISLAM</div>
-      </div>
+      </footer>
     </div>
-  </footer>
-  
-  
-  <div className="sticky-cta" id="stickyCta">
-    <div className="bg-black/90 backdrop-blur-md border-t border-[var(--accent)]/30">
-      <div className="max-w-[1600px] mx-auto px-6 lg:px-10 py-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-5">
-          <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-[var(--accent)] tracking-[0.2em]">
-            <span className="rec-dot w-2 h-2 bg-[var(--accent)] rounded-full"></span>
-            <span>AVAILABLE FOR HIRE</span>
-          </div>
-          <div>
-            <div className="font-display text-xl md:text-2xl leading-none">LET'S COLLABORATE</div>
-            <div className="font-mono text-[10px] text-[var(--muted)] tracking-[0.15em] uppercase mt-1">REPLY WITHIN 24 HOURS</div>
-          </div>
-        </div>
-        <a href="#booking" className="pulse-btn bg-[var(--accent)] text-black px-6 md:px-8 py-3.5 font-heading text-xs md:text-sm tracking-[0.2em] uppercase hover:bg-[var(--accent-bright)] transition-colors flex items-center gap-3 whitespace-nowrap">
-          <span>GET IN TOUCH</span>
-          <i className="fas fa-arrow-right text-xs"></i>
-        </a>
-      </div>
-    </div>
-  </div>
-  
-  
-  <div className="toast" id="toast">
-    <div className="flex items-start gap-3">
-      <div className="w-8 h-8 bg-[var(--accent)] flex items-center justify-center flex-shrink-0">
-        <i className="fas fa-check text-black text-xs"></i>
-      </div>
-      <div>
-        <div className="font-heading text-sm tracking-wider uppercase" id="toastTitle">Request received</div>
-        <div className="text-[var(--fg-dim)] text-xs mt-1" id="toastMsg">A coach will contact you within 24 hours.</div>
-      </div>
-    </div>
-  </div>
-  
-  
-
-    </>
   );
 }

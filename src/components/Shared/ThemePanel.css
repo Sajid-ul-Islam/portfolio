@@ -1,0 +1,365 @@
+/* ══════════════════════════════════════════════
+   THEME PANEL — Clean Popover for All Theme Controls
+   ══════════════════════════════════════════════ */
+
+.tp-container {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ── Floating Mode Toggle ─── */
+.tp-mode-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.tp-floating-mode {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.tp-floating-mode:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.tp-floating-mode svg {
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.tp-floating-mode:hover svg {
+  transform: rotate(30deg);
+}
+
+/* Hover label tooltip */
+.tp-mode-label {
+  position: absolute;
+  right: calc(100% + 0.5rem);
+  white-space: nowrap;
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 0.25rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.tp-mode-wrapper:hover .tp-mode-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Trigger Button ─── */
+.tp-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem 0.45rem 0.55rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+.tp-trigger:hover {
+  background: rgba(0, 0, 0, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+
+.tp-trigger-open {
+  background: rgba(0, 0, 0, 0.85);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tp-trigger i {
+  font-size: 0.8rem;
+  width: 1.2rem;
+  text-align: center;
+  color: var(--accent-color, #22c55e);
+}
+
+.tp-trigger-label {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.tp-chevron {
+  opacity: 0.5;
+  transition: transform 0.3s ease;
+}
+
+.tp-chevron-up {
+  transform: rotate(180deg);
+}
+
+/* ── Panel ─── */
+.tp-panel {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  width: 280px;
+  background: rgba(15, 17, 22, 0.95);
+  backdrop-filter: blur(20px) saturate(1.2);
+  -webkit-backdrop-filter: blur(20px) saturate(1.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 0.75rem;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  animation: tp-panel-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: top right;
+}
+
+@keyframes tp-panel-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(-6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ── Sections ─── */
+.tp-section {
+  margin-bottom: 0.25rem;
+}
+
+.tp-section:last-child {
+  margin-bottom: 0;
+}
+
+.tp-section-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  padding: 0.35rem 0.25rem 0.35rem;
+}
+
+/* ── Theme Buttons ─── */
+.tp-theme-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.tp-theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+.tp-theme-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.tp-theme-btn.active {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.tp-theme-btn i {
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.tp-theme-btn.active i {
+  background: var(--accent-color, #22c55e);
+  color: #000;
+}
+
+.tp-theme-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.tp-theme-name {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.tp-theme-desc {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.3;
+}
+
+.tp-check {
+  flex-shrink: 0;
+  opacity: 0.6;
+  color: var(--accent-color, #22c55e);
+}
+
+/* ── Divider ─── */
+.tp-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  margin: 0.25rem 0.25rem;
+}
+
+/* ── Palette Grid ─── */
+.tp-palette-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+}
+
+.tp-palette-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: inherit;
+  position: relative;
+}
+
+.tp-palette-btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tp-palette-btn.active {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.tp-palette-swatches {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.tp-palette-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  display: block;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.tp-palette-swatch:first-child {
+  width: 16px;
+  height: 16px;
+  z-index: 1;
+}
+
+.tp-palette-swatch:last-child {
+  margin-left: -7px;
+  opacity: 0.7;
+}
+
+.tp-palette-name {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tp-palette-btn .tp-check {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ── Responsive ─── */
+@media (max-width: 640px) {
+  .tp-container {
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .tp-trigger-label {
+    display: none;
+  }
+
+  .tp-trigger {
+    padding: 0.5rem;
+    border-radius: 50%;
+  }
+
+  .tp-trigger i {
+    width: auto;
+  }
+
+  .tp-panel {
+    width: 260px;
+    right: -0.5rem;
+  }
+}

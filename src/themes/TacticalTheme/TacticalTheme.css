@@ -1,0 +1,607 @@
+/* ══════════════════════════════════════════════
+   TACTICAL HUD THEME — CSS Variables & Styles
+   ══════════════════════════════════════════════ */
+
+:root[data-theme="tactical"],
+.theme-tactical {
+  /* Base transition for theme switches — not on hover states */
+  transition: background-color 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+              border-color 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+
+  --tactical-accent: var(--accent-color, #22c55e);
+  --tactical-accent-light: var(--accent-color-light, #4ade80);
+  --tactical-accent-dim: var(--accent-color-dim, #166534);
+  --tactical-accent-text: var(--accent-text, #86efac);
+  --tactical-accent-glow: var(--accent-glow, rgba(34,197,94,0.4));
+  --tactical-bg: #020617;
+  --tactical-bg-card: rgba(15, 23, 42, 0.85);
+  --tactical-text: #f8fafc;
+  --tactical-text-dim: #94a3b8;
+  --tactical-border: rgba(0, 0, 0, 0.25);
+}
+
+/* Light mode for Tactical */
+:root[data-theme="light"] .theme-tactical {
+  --tactical-bg: #f0f4f8;
+  --tactical-bg-card: rgba(255, 255, 255, 0.9);
+  --tactical-text: #0f172a;
+  --tactical-text-dim: #475569;
+  --tactical-border: rgba(0, 0, 0, 0.12);
+}
+
+/* ── Scanlines ─── */
+.tact-scanlines {
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 2px,
+    color-mix(in srgb, var(--tactical-accent) 3%, transparent) 2px,
+    color-mix(in srgb, var(--tactical-accent) 3%, transparent) 4px
+  );
+  pointer-events: none;
+  z-index: 9995;
+  animation: tact-scan-scroll 10s linear infinite;
+}
+
+@keyframes tact-scan-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+/* ── Grid Overlay ─── */
+.tact-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--tactical-accent) 3%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--tactical-accent) 3%, transparent) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 9994;
+}
+
+/* ── CRT Glow ─── */
+.tact-crt {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 60%, color-mix(in srgb, var(--tactical-bg) 60%, transparent) 100%);
+  pointer-events: none;
+  z-index: 9996;
+}
+
+/* ── Status Bar ─── */
+.tact-status-bar {
+  background: color-mix(in srgb, var(--tactical-bg) 95%, black 5%);
+  border-bottom: 1px solid var(--tactical-accent);
+  padding: 6px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  position: relative;
+  z-index: 100;
+}
+
+.tact-status-bar .status-label {
+  color: var(--tactical-accent);
+  font-weight: 700;
+}
+
+.tact-status-bar .status-value {
+  color: var(--tactical-text);
+}
+
+.tact-status-bar .status-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--tactical-accent-light);
+  border-radius: 50%;
+  margin-right: 6px;
+  box-shadow: 0 0 8px var(--tactical-accent-light);
+  animation: tact-pulse 2s infinite;
+}
+
+@keyframes tact-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ── Navigation ─── */
+.tact-nav {
+  background: color-mix(in srgb, var(--tactical-bg) 90%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--tactical-border);
+  padding: 0.75rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+}
+
+.tact-nav a {
+  color: var(--tactical-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.2s;
+}
+
+.tact-nav a::before {
+  content: '[';
+  opacity: 0;
+  margin-right: 4px;
+  transition: opacity 0.2s;
+}
+
+.tact-nav a::after {
+  content: ']';
+  opacity: 0;
+  margin-left: 4px;
+  transition: opacity 0.2s;
+}
+
+.tact-nav a:hover,
+.tact-nav a.active {
+  color: var(--tactical-accent-text);
+}
+
+.tact-nav a:hover::before,
+.tact-nav a:hover::after,
+.tact-nav a.active::before,
+.tact-nav a.active::after {
+  opacity: 1;
+}
+
+/* ── Hero ─── */
+.tact-hero {
+  position: relative;
+  padding: 4rem 0 3rem;
+  overflow: hidden;
+}
+
+.tact-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, color-mix(in srgb, var(--tactical-accent) 6%, transparent) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 50%, color-mix(in srgb, var(--tactical-accent) 3%, transparent) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.tact-section-label {
+  display: inline-flex;
+  align-items: center;
+  color: var(--tactical-accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid var(--tactical-accent);
+  padding: 2px 10px;
+  margin-bottom: 1rem;
+}
+
+.tact-section-label::before {
+  content: '[';
+  margin-right: 6px;
+}
+
+.tact-section-label::after {
+  content: ']';
+  margin-left: 6px;
+}
+
+.tact-hero h1 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  color: var(--tactical-text);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.tact-hero h1 .highlight {
+  color: var(--tactical-accent-text);
+  text-shadow: 0 0 20px var(--tactical-accent-glow);
+}
+
+.tact-typewriter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  color: var(--tactical-text-dim);
+  line-height: 1.7;
+  max-width: 600px;
+}
+
+.tact-typewriter::after {
+  content: '_';
+  color: var(--tactical-accent);
+  animation: tact-blink 1s step-end infinite;
+}
+
+@keyframes tact-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Terminal Text Reveal ─── */
+@keyframes tact-reveal {
+  0% { clip-path: inset(0 100% 0 0); }
+  100% { clip-path: inset(0 0% 0 0); }
+}
+
+.tact-reveal {
+  display: inline-block;
+  animation: tact-reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Social Links ─── */
+.tact-social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--tactical-border);
+  color: var(--tactical-text-dim);
+  font-size: 1.1rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tact-social-link:hover {
+  border-color: var(--tactical-accent);
+  color: var(--tactical-accent-light);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--tactical-accent) 30%, transparent);
+  transform: translateY(-3px);
+}
+
+/* ── Profile Image Frame ─── */
+.tact-profile-frame {
+  position: relative;
+  max-width: 250px;
+  aspect-ratio: 1;
+  margin: 0 auto;
+  border: 1px solid var(--tactical-border);
+  clip-path: polygon(10% 0, 100% 0, 100% 90%, 90% 100%, 0 100%, 0 10%);
+}
+
+.tact-profile-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(40%) contrast(1.15);
+  transition: filter 0.5s ease;
+}
+
+.tact-profile-frame:hover img {
+  filter: grayscale(0%) contrast(1.1);
+}
+
+.tact-scan-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--tactical-accent-light);
+  box-shadow: 0 0 10px var(--tactical-accent-light);
+  z-index: 10;
+  animation: tact-scanner 4s linear infinite;
+}
+
+@keyframes tact-scanner {
+  0% { top: -2%; opacity: 0; }
+  5% { opacity: 1; }
+  95% { opacity: 1; }
+  100% { top: 102%; opacity: 0; }
+}
+
+.tact-corner {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--tactical-accent);
+  z-index: 11;
+  pointer-events: none;
+}
+.tact-corner-tl { top: -2px; left: -2px; border-right: 0; border-bottom: 0; }
+.tact-corner-tr { top: -2px; right: -2px; border-left: 0; border-bottom: 0; }
+.tact-corner-bl { bottom: -2px; left: -2px; border-right: 0; border-top: 0; }
+.tact-corner-br { bottom: -2px; right: -2px; border-left: 0; border-top: 0; }
+
+/* ── Scroll Reveal ─── */
+.tact-section {
+  padding: 4rem 1.5rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--tactical-accent) 6%, transparent);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tact-section.tact-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tact-section h2 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+  font-weight: 700;
+  color: var(--tactical-text);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 2rem;
+}
+
+/* ── Timeline ─── */
+.tact-timeline {
+  position: relative;
+  padding-left: 2rem;
+}
+
+.tact-timeline::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--tactical-accent);
+  box-shadow: 0 0 8px var(--tactical-accent);
+}
+
+.tact-timeline-item {
+  position: relative;
+  padding-bottom: 2rem;
+}
+
+.tact-timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -2rem;
+  top: 0.5rem;
+  width: 12px;
+  height: 12px;
+  background: var(--tactical-bg);
+  border: 2px solid var(--tactical-accent);
+  transform: rotate(45deg);
+  box-shadow: 0 0 8px var(--tactical-accent);
+  transition: all 0.3s;
+}
+
+.tact-timeline-item:hover::before {
+  background: var(--tactical-accent);
+  box-shadow: 0 0 16px var(--tactical-accent);
+}
+
+.tact-timeline-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--tactical-accent);
+  border: 1px solid var(--tactical-border);
+  padding: 2px 10px;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+}
+
+.tact-timeline-item h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.05rem;
+  color: var(--tactical-text);
+  margin-bottom: 0.25rem;
+}
+
+.tact-timeline-item .company {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--tactical-accent-text);
+  margin-bottom: 0.75rem;
+}
+
+/* ── Card ─── */
+.tact-card {
+  background: var(--tactical-bg-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--tactical-border);
+  padding: 1.5rem;
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+}
+
+.tact-card::before,
+.tact-card::after {
+  content: '';
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: var(--tactical-accent);
+  border-style: solid;
+  opacity: 0.4;
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.tact-card::before {
+  top: 8px; left: 8px;
+  border-width: 1px 0 0 1px;
+}
+
+.tact-card::after {
+  bottom: 8px; right: 8px;
+  border-width: 0 1px 1px 0;
+}
+
+.tact-card:hover {
+  border-color: var(--tactical-accent);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 20px color-mix(in srgb, var(--tactical-accent) 10%, transparent);
+}
+
+.tact-card:hover::before {
+  top: -2px; left: -2px;
+  width: 14px; height: 14px;
+  opacity: 1;
+}
+
+.tact-card:hover::after {
+  bottom: -2px; right: -2px;
+  width: 14px; height: 14px;
+  opacity: 1;
+}
+
+.tact-card h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  color: var(--tactical-accent-text);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.tact-card p {
+  color: var(--tactical-text-dim);
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+/* ── Skill Chips ─── */
+.tact-skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--tactical-border);
+  background: color-mix(in srgb, var(--tactical-accent) 4%, transparent);
+  color: var(--tactical-text-dim);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.tact-skill-chip:hover {
+  border-color: var(--tactical-accent);
+  color: var(--tactical-accent-text);
+  box-shadow: 0 0 10px var(--tactical-accent-glow);
+  transform: translateY(-2px);
+}
+
+/* ── Progress Bar ─── */
+.tact-progress {
+  height: 4px;
+  background: color-mix(in srgb, var(--tactical-accent) 8%, transparent);
+  position: relative;
+  overflow: hidden;
+}
+
+.tact-progress-fill {
+  height: 100%;
+  background: var(--tactical-accent);
+  box-shadow: 0 0 10px var(--tactical-accent);
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 0%;
+}
+
+/* ── Buttons ─── */
+.tact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid var(--tactical-accent);
+  color: var(--tactical-accent-text);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.tact-btn:hover {
+  background: var(--tactical-accent);
+  color: var(--tactical-bg);
+  box-shadow: 0 0 15px color-mix(in srgb, var(--tactical-accent) 40%, transparent);
+}
+
+.tact-btn-primary {
+  background: var(--tactical-accent);
+  color: var(--tactical-bg);
+}
+
+.tact-btn-primary:hover {
+  background: var(--tactical-accent-light);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--tactical-accent-light) 50%, transparent);
+}
+
+/* ── Filter Buttons ─── */
+.tact-filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid var(--tactical-border);
+  color: var(--tactical-text-dim);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tact-filter-btn:hover,
+.tact-filter-btn.active {
+  border-color: var(--tactical-accent);
+  color: var(--tactical-accent-text);
+  background: color-mix(in srgb, var(--tactical-accent) 8%, transparent);
+}
+
+/* ── Animations ─── */
+@keyframes tact-fade-up {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.tact-fade-up {
+  animation: tact-fade-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tact-fade-up-d1 { animation-delay: 0.1s; }
+.tact-fade-up-d2 { animation-delay: 0.2s; }
+.tact-fade-up-d3 { animation-delay: 0.3s; }
+.tact-fade-up-d4 { animation-delay: 0.4s; }
+
+/* ── Glitch Text ─── */
+@keyframes tact-glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 1px); }
+  40% { transform: translate(2px, -1px); }
+  60% { transform: translate(-1px, 2px); }
+  80% { transform: translate(1px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.tact-glitch {
+  animation: tact-glitch 0.3s ease-in-out 3;
+}
+
+/* ── Responsive ─── */
+@media (max-width: 768px) {
+  .tact-status-bar .status-right {
+    display: none !important;
+  }
+
+  .tact-hero {
+    padding: 2rem 0;
+  }
+
+  .tact-nav a {
+    font-size: 0.6rem;
+  }
+}
