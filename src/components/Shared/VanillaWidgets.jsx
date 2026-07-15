@@ -2,12 +2,14 @@ import React, { useEffect } from 'react';
 
 export default function VanillaWidgets() {
   useEffect(() => {
+    // Use Vite's BASE_URL so paths work in dev (/portfolio/js/...) and production
+    const base = import.meta.env.BASE_URL || '/';
     const scripts = [
-      '/js/ai-bot.min.js',
-      '/js/terminal.min.js',
-      '/js/command-palette.min.js',
-      '/js/floating-widgets.min.js',
-      '/js/theme-switcher-ripple.js'
+      `${base}js/ai-bot.min.js`,
+      `${base}js/terminal.min.js`,
+      `${base}js/command-palette.min.js`,
+      `${base}js/floating-widgets.min.js`,
+      `${base}js/theme-switcher-ripple.js`
     ];
 
     const loadScript = (src) => {
@@ -15,7 +17,13 @@ export default function VanillaWidgets() {
         const script = document.createElement('script');
         script.src = src;
         script.async = true;
-        script.onload = resolve;
+        script.onload = () => {
+          // Fire a custom event so any component waiting for this script can init
+          if (src.includes('theme-switcher-ripple')) {
+            window.dispatchEvent(new CustomEvent('ripple-ready'));
+          }
+          resolve();
+        };
         script.onerror = resolve; // Continue even if one fails
         document.body.appendChild(script);
       });
