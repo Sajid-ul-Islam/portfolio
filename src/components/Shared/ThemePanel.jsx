@@ -11,7 +11,19 @@ const THEMES = [
 export default function ThemePanel({ currentTheme, onThemeChange }) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
-  const { mode, toggleMode, accent, setAccent, palettes } = useColorTheme();
+  const { mode, setMode, accent, setAccent, palettes } = useColorTheme();
+
+  // Initialize ripple theme toggler
+  useEffect(() => {
+    if (window.initThemeToggleWithRipple) {
+      window.initThemeToggleWithRipple({
+        buttonId: 'theme-mode-toggle-button',
+        getTheme: () => mode,
+        applyTheme: (theme) => setMode(theme),
+        saveTheme: (theme) => localStorage.setItem('portfolio_mode', theme),
+      });
+    }
+  }, [mode, setMode]);
 
   // Close on click outside
   useEffect(() => {
@@ -42,8 +54,8 @@ export default function ThemePanel({ currentTheme, onThemeChange }) {
       {/* Persistent Mode Toggle */}
       <div className="tp-mode-wrapper">
         <button
+          id="theme-mode-toggle-button"
           data-mode-toggle
-          onClick={toggleMode}
           className="tp-floating-mode"
           aria-label={`Switch to ${mode === 'dark' ? 'light' : 'dark'} mode`}
         >

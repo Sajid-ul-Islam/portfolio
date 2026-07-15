@@ -177,5 +177,5 @@ export function useColorTheme() {
 
   const activePalette = PALETTES[accent];
 
-  return { mode, toggleMode, accent, setAccent: changeAccent, palettes: PALETTES, activePalette };
+  return { mode, toggleMode, setMode, accent, setAccent: changeAccent, palettes: PALETTES, activePalette };
 }
