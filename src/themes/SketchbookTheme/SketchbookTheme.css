@@ -1,0 +1,313 @@
+
+    /* THEME VARIABLES & OVERRIDES */
+    :root {
+      --bg: #FAF9F6; /* Alabaster warm light background */
+      --fg: #121212;
+      --fg-dim: #3a3a3a;
+      --muted: #7a7a7a;
+      --accent: #3b82f6; /* Blue accent */
+      --accent-hover: #2563eb;
+      --ink: rgba(18, 18, 18, 0.45);
+      --ink-faint: rgba(18, 18, 18, 0.15);
+      --border-color: rgba(18, 18, 18, 0.1);
+    }
+
+    :root[data-theme="dark"] {
+      --bg: #0F0F0F; /* Deep charcoal dark background */
+      --fg: #F5F5F5;
+      --fg-dim: #C0C0C0;
+      --muted: #6A6A6A;
+      --accent: #38bdf8; /* Light blue accent */
+      --accent-hover: #0ea5e9;
+      --ink: rgba(245, 245, 245, 0.4);
+      --ink-faint: rgba(245, 245, 245, 0.18);
+      --border-color: rgba(245, 245, 245, 0.1);
+    }
+
+    /* ACCENT OVERRIDES */
+    :root[data-accent="green"] {
+      --accent: #22c55e;
+      --accent-hover: #16a34a;
+    }
+    :root[data-accent="orange"] {
+      --accent: #f97316;
+      --accent-hover: #ea580c;
+    }
+    :root[data-accent="yellow"] {
+      --accent: #eab308;
+      --accent-hover: #ca8a04;
+    }
+    :root[data-accent="blue"] {
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+    }
+    :root[data-theme="dark"][data-accent="blue"] {
+      --accent: #38bdf8;
+      --accent-hover: #0ea5e9;
+    }
+    :root[data-accent="red"] {
+      --accent: #ef4444;
+      --accent-hover: #dc2626;
+    }
+
+    /* BASE STYLES */
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+      scroll-padding-top: 6rem;
+    }
+    body {
+      background-color: var(--bg);
+      color: var(--fg);
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* CUSTOM SKETCH STYLES (MATCHING SOURCE) */
+    .sk-text {
+      filter: url(#sk-rough-text);
+    }
+    
+    .sk-box {
+      position: relative;
+    }
+    .sk-box::before, .sk-box::after {
+      content: "";
+      border-radius: inherit;
+      border: 1.5px solid var(--ink);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+    }
+    .sk-box::before {
+      filter: url(#sk-rough-1);
+    }
+    .sk-box::after {
+      border-width: 1.2px;
+      border-color: var(--ink-faint);
+      filter: url(#sk-rough-2);
+      inset: -3px 2px 1px -3px;
+    }
+
+    /* Sketchy rules */
+    .sk-rule-t, .sk-rule-b {
+      position: relative;
+    }
+    .sk-rule-t::before, .sk-rule-t::after, .sk-rule-b::before, .sk-rule-b::after {
+      content: "";
+      background: var(--ink);
+      pointer-events: none;
+      height: 1.5px;
+      position: absolute;
+      left: 0;
+      right: 0;
+    }
+    .sk-rule-t::before, .sk-rule-b::before {
+      filter: url(#sk-rough-1);
+    }
+    .sk-rule-t::after, .sk-rule-b::after {
+      background: var(--ink-faint);
+      filter: url(#sk-rough-2);
+    }
+    .sk-rule-t::before { top: 0; }
+    .sk-rule-t::after { top: 1.5px; }
+    .sk-rule-b::before { bottom: 0; }
+    .sk-rule-b::after { bottom: -1.5px; }
+
+    @media (min-width: 768px) {
+      .sk-rule-l-md {
+        position: relative;
+      }
+      .sk-rule-l-md::before {
+        content: "";
+        background: var(--ink);
+        filter: url(#sk-rough-1);
+        pointer-events: none;
+        width: 1.5px;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+      }
+    }
+
+    .sk-ink {
+      filter: url(#sk-rough-1);
+      background: var(--ink) !important;
+    }
+
+    /* Grain Texture Overlay */
+    .sk-grain {
+      z-index: 90;
+      pointer-events: none;
+      opacity: 0.08;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      position: fixed;
+      inset: 0;
+    }
+    :root[data-theme="dark"] .sk-grain {
+      opacity: 0.12;
+      mix-blend-mode: screen;
+    }
+
+    /* Framing brackets animations */
+    @property --sk-sweep {
+      syntax: "<percentage>";
+      inherits: true;
+      initial-value: 0%;
+    }
+
+    @keyframes sk-draw-down {
+      0% { clip-path: inset(-8px -8px 100%); }
+      100% { clip-path: inset(-8px); }
+    }
+    @keyframes sk-draw-right {
+      0% { clip-path: inset(-8px 100% -8px -8px); }
+      100% { clip-path: inset(-8px); }
+    }
+    @keyframes sk-sweep {
+      0% { --sk-sweep: 0%; }
+      100% { --sk-sweep: 100%; }
+    }
+
+    .sk-draw-v {
+      animation: sk-draw-down 0.9s ease-out var(--sk-draw-delay, 0s) both;
+    }
+    .sk-draw-h {
+      animation: sk-draw-right 0.6s ease-out var(--sk-draw-delay, 0s) both;
+    }
+    .sk-draw-rule::before, .sk-draw-rule::after {
+      animation: sk-draw-right 1.1s ease-out var(--sk-draw-delay, 0s) both;
+    }
+    .sk-draw-box {
+      animation: sk-sweep 1.1s ease-in-out var(--sk-draw-delay, 0s) both;
+    }
+    .sk-draw-box::before, .sk-draw-box::after {
+      -webkit-mask-image: conic-gradient(#000 var(--sk-sweep), #0000 0);
+      mask-image: conic-gradient(#000 var(--sk-sweep), #0000 0);
+    }
+
+    /* CUSTOM SKETCH BUTTON */
+    .btn-sketch {
+      position: relative;
+      background: transparent;
+      transition: transform 0.15s ease-out;
+    }
+    .btn-sketch::before {
+      content: "";
+      border-radius: inherit;
+      border: 1.5px solid var(--ink);
+      filter: url(#sk-rough-1);
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      transition: border-color 0.15s ease-out;
+    }
+    .btn-sketch:active {
+      transform: scale(0.97);
+    }
+    .btn-sketch:hover::before {
+      border-color: var(--accent);
+    }
+
+    /* Selection Highlight */
+    ::selection {
+      background-color: var(--accent);
+      color: var(--bg);
+    }
+
+    /* Hand signature draw line animation */
+    .signature-path {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: sign 3s ease-out forwards;
+    }
+    @keyframes sign {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* RIPPLE TEARDROP OVERLAY STYLES */
+    .theme-drop-overlay {
+      z-index: 9999;
+      pointer-events: none;
+      view-transition-name: theme-drop;
+      position: fixed;
+      inset: 0;
+    }
+    .theme-drop {
+      will-change: transform;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.25));
+      width: 30px;
+      height: 42px;
+      position: absolute;
+      top: 0;
+    }
+    .theme-drop path {
+      fill: var(--bg);
+    }
+    .theme-drop ellipse {
+      fill: #fff;
+      opacity: 0.35;
+    }
+    .theme-drop-bead {
+      background: var(--bg);
+      opacity: 0;
+      border-radius: 50%;
+      width: 10px;
+      height: 10px;
+      position: absolute;
+      box-shadow: inset 0 2px 2px rgba(255,255,255,0.6), inset 0 -1px 2px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25);
+    }
+    .theme-splash-drop {
+      opacity: 0.95;
+      position: absolute;
+    }
+    .theme-splash-drop i {
+      background: var(--bg);
+      border-radius: 50%;
+      width: 100%;
+      height: 100%;
+      display: block;
+      box-shadow: inset 0 1px 1px rgba(255,255,255,0.65), inset 0 -1px 1px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .theme-water {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      inset: 0;
+    }
+    ::view-transition {
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      ::view-transition-old(root) {
+        animation: none;
+      }
+      ::view-transition-new(root) {
+        animation: 2.2s cubic-bezier(0.12, 0.72, 0.28, 1) both theme-ripple-reveal;
+      }
+      :root.theme-rippling::view-transition-new(root) {
+        filter: url(#theme-water-warp);
+      }
+      ::view-transition-old(theme-drop) {
+        display: none;
+      }
+      ::view-transition-new(theme-drop) {
+        animation: none;
+      }
+    }
+    @keyframes theme-ripple-reveal {
+      0% {
+        clip-path: ellipse(0px 0px at var(--ripple-x, 50vw) var(--ripple-y, 40vh));
+      }
+      to {
+        clip-path: ellipse(var(--ripple-rx, 160vmax) var(--ripple-ry, 90vmax) at var(--ripple-x, 50vw) var(--ripple-y, 40vh));
+      }
+    }
+  

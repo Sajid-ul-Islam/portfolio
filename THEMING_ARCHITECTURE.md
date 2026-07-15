@@ -1,63 +1,25 @@
-# Theming Architecture
+# Theming Architecture (React SPA)
 
-The portfolio implements a **Multi-Page Routing & Dynamic Data Theming Architecture**. Distinct themes (which completely alter the UI/UX layout, DOM structure, and CSS framework) are split into separate HTML files at the root level. A root index script routes the visitor to their active or last-used theme.
-
-This approach guarantees that:
-1. Each theme can use entirely different HTML structures (e.g., Tailwind vs. Bootstrap) and styles.
-2. Core data is completely synchronized, dynamic, and shared. A single central data script updates all themes instantly.
-3. The light/dark mode teardrop switcher animation is global, modular, and reusable on any theme.
+The portfolio now implements a **Context-Based Dynamic Theming Architecture** using React and Vite.
 
 ## Core Theming Components
 
-### 1. The Theme Router (`index.html`)
-- `index.html` is now a lightweight gateway page.
-- On load, it instantly detects the user's active theme in `localStorage` (defaulting to `theme-sketchbook.html`) and redirects them using `window.location.replace()`.
-- This ensures direct entries to the site always land on the user's preferred layout.
+### 1. `ThemeContext` (`src/context/ThemeContext.jsx`)
+- Manages the active theme globally (e.g., `theme-sketchbook`, `theme-tactical`, `theme-ironforge`).
+- Persists the user's preferred theme in `localStorage` so their choice is remembered across sessions.
 
-### 2. Unified Global Data (`js/portfolio-data.js`)
-- Exposes `window.PortfolioData` as the single source of truth for the entire portfolio.
-- Provides functions (`getInfo()`, `getExperiences()`, `getEducation()`, `getProjects()`, `getSkills()`) returning mapped, normalized data models.
-- Features an async `load()` function that fetches live data from Sajid's Google Sheet, normalizes schema differences, saves updates in local storage cache, and falls back to a robust local dataset if offline.
+### 2. `App.jsx` (Theme Router)
+- Instead of using a gateway `index.html` to redirect to different HTML files, `App.jsx` dynamically renders the correct React component based on the `ThemeContext`.
+- This provides an instant, seamless transition between themes without full page reloads.
 
-### 3. Global Teardrop Transition (`js/theme-switcher-ripple.js`)
-- Exposes a reusable helper `window.initThemeToggleWithRipple(options)`.
-- Automatically injects the WebGL shaders, SVG droplets, and CSS ripple animations dynamically into the document `<head>`.
-- Any theme (present or future) can link this file, provide selector references and theme toggling callbacks, and get the beautiful teardrop light/dark mode transition out-of-the-box.
-
-## Current Themes
-- **Sketchbook Ink** (`theme-sketchbook.html`): High-aesthetic hand-drawn sketch dashboard built using Tailwind and SVG filters.
-- **Tactical HUD** (`theme-tactical.html`): Dark terminal hacker grid style built with Bootstrap and canvas telemetry.
-- **Ironforge Studio** (`theme-ironforge.html`): Premium athletic strength style with card flipping, custom reels, and bold headers.
-
----
+### 3. `DataContext` (`src/context/DataContext.jsx`)
+- The single source of truth for the entire portfolio's data.
+- It loads data from `src/data/portfolio.json`.
+- All theme components consume this context using the `useData()` hook to render experiences, projects, skills, etc.
 
 ## How to Add a New Theme
-If a developer needs to add a new theme layout (e.g., `theme-cyberpunk.html`):
-1. **Create HTML**: Create the new HTML file in the root directory.
-2. **Import Libraries**: Load the global scripts in the `<head>`:
-   ```html
-   <script src="js/portfolio-data.js"></script>
-   <script src="js/theme-switcher-ripple.js"></script>
-   ```
-3. **Add Navigation Switcher**: Put the Theme switcher dropdown/links in your navigation bar, referencing the separate HTML files:
-   - `theme-sketchbook.html`
-   - `theme-tactical.html`
-   - `theme-ironforge.html`
-   - `theme-cyberpunk.html`
-   Remember to update the dropdown switcher list in all other themes too.
-4. **Initialize Switcher & Tracking**: At the end of your theme's script block, register the teardrop ripple handler and trace the active file:
-   ```javascript
-   localStorage.setItem('portfolio-active-theme', 'theme-cyberpunk.html');
 
-   window.initThemeToggleWithRipple({
-     buttonId: 'theme-toggle',
-     getTheme: () => document.documentElement.getAttribute('data-theme') || 'dark',
-     applyTheme: (theme) => {
-       document.documentElement.setAttribute('data-theme', theme);
-       // custom page theme updates...
-     },
-     saveTheme: (theme) => localStorage.setItem('tactical-theme', theme)
-   });
-   ```
-5. **Render Content Dynamically**: Call `window.PortfolioData.load()` on DOM content loaded, and use modular functions to inject experiences, education, and projects from the global provider.
-
+1. **Create Theme Folder**: Create a new folder in `src/themes/` (e.g., `src/themes/CyberpunkTheme`).
+2. **Create Component**: Create an `index.jsx` in that folder that consumes `useData()` and renders the UI.
+3. **Update Router**: Import the new theme in `src/App.jsx` and add it to the conditional rendering block.
+4. **Update Switcher**: Add the new theme option to the theme select dropdown in `App.jsx` (or your shared ThemeSwitcher component).

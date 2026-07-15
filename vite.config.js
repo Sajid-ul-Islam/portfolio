@@ -1,53 +1,15 @@
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  root: '.',
-  publicDir: false,
   plugins: [
-    {
-      name: 'disable-stdin-shortcuts',
-      configureServer(server) {
-        process.stdin.pause();
-        process.stdin.on('error', (err) => {
-          console.warn('[VITE] Suppressed stdin error:', err.message);
-        });
-        process.on('uncaughtException', (err) => {
-          if (err && (err.code === 'UNKNOWN' || err.syscall === 'read')) {
-            console.warn('[VITE] Suppressed filesystem read stream error:', err.message);
-          } else {
-            console.error('[VITE] Uncaught Exception:', err);
-          }
-        });
-      }
-    }
+    react(),
+    tailwindcss()
   ],
+  base: '/portfolio/',
   build: {
     outDir: 'dist',
-    emptyOutDir: true,
-    cssCodeSplit: true,
-    rollupOptions: {
-      input: {
-        main: 'index.html',
-      },
-    },
-  },
-  css: {
-    devSourcemap: true,
-  },
-  server: {
-    port: 3000,
-    open: true,
-    watch: {
-      usePolling: true,
-      interval: 500,
-      ignored: [
-        '**/.git/**',
-        '**/node_modules/**',
-        '**/.idea/**',
-        '**/.vscode/**',
-        '**/*.tmp',
-        '**/~*'
-      ]
-    }
-  },
-});
+  }
+})
