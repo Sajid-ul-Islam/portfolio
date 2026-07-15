@@ -275,22 +275,23 @@ export default function IronforgeTheme() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-10">
-            <div className="forge-fade-up forge-delay-2">
-              {data.skillGroups?.map((group, gIdx) => (
-                <div key={gIdx} className="mb-8">
-                  <h3 className="font-mono text-xs tracking-wider uppercase text-[var(--forge-orange)] mb-3">{group.name}</h3>
-                  <div className="grid grid-cols-2 gap-2">
-                    {group.skills?.map((skill, sIdx) => (
-                      <div key={sIdx}
-                        className="flex items-center gap-2 p-2 border border-[var(--forge-border)] hover:border-[var(--forge-orange-dim)] transition-colors">
-                        <i className="fas fa-cog text-[var(--forge-orange)] text-[10px]" />
-                        <span className="text-sm text-[var(--forge-fg-dim)]">{skill.name}</span>
-                      </div>
-                    ))}
+            {data.skillGroups?.length > 0 && (
+              <div className="forge-fade-up forge-delay-2">
+                {data.skillGroups.map((group, gIdx) => (
+                  <div key={gIdx} className="mb-8">
+                    <h3 className="font-mono text-xs tracking-wider uppercase text-[var(--forge-orange)] mb-3">{group.name}</h3>
+                    <div className="grid grid-cols-2 gap-2">
+                      {group.skills?.map((skill, sIdx) => (
+                        <div key={sIdx} className="flex items-center gap-2 p-2 border border-[var(--forge-border)] hover:border-[var(--forge-orange-dim)] transition-colors">
+                          <i className="fas fa-cog text-[var(--forge-orange)] text-[10px]" />
+                          <span className="text-sm text-[var(--forge-fg-dim)]">{skill.name}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
 
             <div className="forge-fade-up forge-delay-3">
               <h3 className="font-mono text-xs tracking-wider uppercase text-[var(--forge-orange)] mb-3">Proficiency Levels</h3>
@@ -323,24 +324,26 @@ export default function IronforgeTheme() {
           </h2>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {data.education?.map((edu, idx) => (
-              <div className="forge-project-card forge-notch forge-fade-up" key={edu.id || idx}
-                style={{ animationDelay: `${0.2 + idx * 0.1}s` }}>
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[var(--forge-bg-darker)] border border-[var(--forge-border-light)] flex items-center justify-center shrink-0">
-                    <i className="fas fa-graduation-cap text-[var(--forge-orange)] text-xl" />
-                  </div>
-                  <div>
-                    <h3 className="font-display text-2xl mb-1">{edu.degree}</h3>
-                    <div className="font-mono text-xs text-[var(--forge-fg-dim)] mb-2">{edu.institution}</div>
-                    <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.15em] uppercase">{edu.date}</div>
-                    {edu.location && (
-                      <div className="font-mono text-[10px] text-[var(--forge-muted)] mt-1">{edu.location}</div>
-                    )}
+            {data.education?.length > 0 && (
+              data.education.map((edu, idx) => (
+                <div className="forge-project-card forge-notch forge-fade-up" key={edu.id || idx}
+                  style={{ animationDelay: `${0.2 + idx * 0.1}s` }}>
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-[var(--forge-bg-darker)] border border-[var(--forge-border-light)] flex items-center justify-center shrink-0">
+                      <i className="fas fa-graduation-cap text-[var(--forge-orange)] text-xl" />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-2xl mb-1">{edu.degree}</h3>
+                      <div className="font-mono text-xs text-[var(--forge-fg-dim)] mb-2">{edu.institution}</div>
+                      <div className="font-mono text-[10px] text-[var(--forge-muted)] tracking-[0.15em] uppercase">{edu.duration}</div>
+                      {edu.location && (
+                        <div className="font-mono text-[10px] text-[var(--forge-muted)] mt-1">{edu.location}</div>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </section>

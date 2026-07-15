@@ -49,13 +49,20 @@
   --font-serif-text: 'Source Serif 4', Georgia, serif;
 }
 
-:root[data-theme="light"] { color-scheme: light; }
-:root[data-theme="dark"]  { color-scheme: dark; }
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
 
 /* ══════════════════════════════════════════════
    Base Body Styles
    ══════════════════════════════════════════════ */
-html { scroll-padding-top: 5rem; }
+html {
+  scroll-padding-top: 5rem;
+}
 
 body {
   background-color: var(--background-color-base);
@@ -105,6 +112,7 @@ body {
 .sk-box {
   position: relative;
 }
+
 .sk-box::before,
 .sk-box::after {
   content: "";
@@ -114,9 +122,11 @@ body {
   position: absolute;
   inset: 0;
 }
+
 .sk-box::before {
   filter: url(#sk-rough-1);
 }
+
 .sk-box::after {
   border-width: 1.2px;
   border-color: var(--ink-faint);
@@ -129,6 +139,7 @@ body {
 .sk-rule-b {
   position: relative;
 }
+
 .sk-rule-t::before,
 .sk-rule-t::after,
 .sk-rule-b::before,
@@ -141,14 +152,33 @@ body {
   left: 0;
   right: 0;
 }
+
 .sk-rule-t::before,
-.sk-rule-b::before { filter: url(#sk-rough-1); }
+.sk-rule-b::before {
+  filter: url(#sk-rough-1);
+}
+
 .sk-rule-t::after,
-.sk-rule-b::after  { background: var(--ink-faint); filter: url(#sk-rough-2); }
-.sk-rule-t::before { top: 0; }
-.sk-rule-t::after  { top: 1.5px; }
-.sk-rule-b::before { bottom: 0; }
-.sk-rule-b::after  { bottom: -1.5px; }
+.sk-rule-b::after {
+  background: var(--ink-faint);
+  filter: url(#sk-rough-2);
+}
+
+.sk-rule-t::before {
+  top: 0;
+}
+
+.sk-rule-t::after {
+  top: 1.5px;
+}
+
+.sk-rule-b::before {
+  bottom: 0;
+}
+
+.sk-rule-b::after {
+  bottom: -1.5px;
+}
 
 /* Ink-colored element */
 .sk-ink {
@@ -165,23 +195,52 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
   @keyframes sk-draw-down {
-    0%   { clip-path: inset(-8px -8px 100%); }
-    100% { clip-path: inset(-8px); }
-  }
-  @keyframes sk-draw-right {
-    0%   { clip-path: inset(-8px 100% -8px -8px); }
-    100% { clip-path: inset(-8px); }
-  }
-  @keyframes sk-sweep {
-    0%   { --sk-sweep: 0%; }
-    100% { --sk-sweep: 100%; }
+    0% {
+      clip-path: inset(-8px -8px 100%);
+    }
+
+    100% {
+      clip-path: inset(-8px);
+    }
   }
 
-  .sk-draw-v     { animation: sk-draw-down  0.9s ease-out var(--sk-draw-delay, 0s) both; }
-  .sk-draw-h     { animation: sk-draw-right 0.6s ease-out var(--sk-draw-delay, 0s) both; }
+  @keyframes sk-draw-right {
+    0% {
+      clip-path: inset(-8px 100% -8px -8px);
+    }
+
+    100% {
+      clip-path: inset(-8px);
+    }
+  }
+
+  @keyframes sk-sweep {
+    0% {
+      --sk-sweep: 0%;
+    }
+
+    100% {
+      --sk-sweep: 100%;
+    }
+  }
+
+  .sk-draw-v {
+    animation: sk-draw-down 0.9s ease-out var(--sk-draw-delay, 0s) both;
+  }
+
+  .sk-draw-h {
+    animation: sk-draw-right 0.6s ease-out var(--sk-draw-delay, 0s) both;
+  }
+
   .sk-draw-rule::before,
-  .sk-draw-rule::after { animation: sk-draw-right 1.1s ease-out var(--sk-draw-delay, 0s) both; }
-  .sk-draw-box   { animation: sk-sweep       1.1s ease-in-out var(--sk-draw-delay, 0s) both; }
+  .sk-draw-rule::after {
+    animation: sk-draw-right 1.1s ease-out var(--sk-draw-delay, 0s) both;
+  }
+
+  .sk-draw-box {
+    animation: sk-sweep 1.1s ease-in-out var(--sk-draw-delay, 0s) both;
+  }
+
   .sk-draw-box::before,
   .sk-draw-box::after {
     -webkit-mask-image: conic-gradient(#000 var(--sk-sweep), #0000 0);
@@ -211,6 +270,7 @@ body {
   transition: transform 0.15s ease-out, background-color 0.15s ease-out;
   position: relative;
 }
+
 .shamim-btn::before {
   content: "";
   border-radius: inherit;
@@ -220,17 +280,29 @@ body {
   position: absolute;
   inset: 0;
 }
-.shamim-btn:active { transform: scale(0.97); }
+
+.shamim-btn:active {
+  transform: scale(0.97);
+}
+
 .shamim-btn-neutral {
   background-color: var(--btn-neutral-bg);
   color: var(--text-color-strong);
 }
-.shamim-btn-neutral:hover { background-color: var(--btn-neutral-bg-hover); }
+
+.shamim-btn-neutral:hover {
+  background-color: var(--btn-neutral-bg-hover);
+}
+
 .shamim-btn-filled {
   background-color: var(--btn-filled-bg);
   color: var(--btn-filled-text);
 }
-.shamim-btn-filled:hover { background-color: var(--btn-filled-bg-hover); }
+
+.shamim-btn-filled:hover {
+  background-color: var(--btn-filled-bg-hover);
+}
+
 .shamim-btn-filled::before {
   border-color: color-mix(in oklab, var(--btn-filled-text) 55%, transparent);
 }
@@ -247,7 +319,7 @@ body {
   --accent: var(--accent-color);
   --accent-bg: color-mix(in srgb, var(--accent-color) 15%, transparent);
   --accent-border: color-mix(in srgb, var(--accent-color) 50%, transparent);
-  --shadow: rgba(0,0,0,.4) 0 10px 15px -3px, rgba(0,0,0,.25) 0 4px 6px -2px;
+  --shadow: rgba(0, 0, 0, .4) 0 10px 15px -3px, rgba(0, 0, 0, .25) 0 4px 6px -2px;
   --sans: var(--font-sans);
   --heading: var(--font-mono);
   --mono: var(--font-mono);
@@ -261,25 +333,111 @@ body {
   --accent: var(--accent-color);
   --accent-bg: color-mix(in srgb, var(--accent-color) 12%, transparent);
   --accent-border: color-mix(in srgb, var(--accent-color) 40%, transparent);
-  --shadow: rgba(0,0,0,.6) 0 10px 15px -3px;
+  --shadow: rgba(0, 0, 0, .6) 0 10px 15px -3px;
   --sans: var(--font-sans);
   --heading: var(--font-mono);
   --mono: var(--font-mono);
 }
 
+.theme-tactical,
+.theme-ironforge {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+}
+
 /* ══════════════════════════════════════════════
    Color Palette Presets — define accent & secondary vars
    ══════════════════════════════════════════════ */
-:root[data-accent="neon"]  { --accent-color: #22c55e; --accent-color-light: #4ade80; --accent-color-dim: #166534; --accent-secondary: #a855f7; --accent-text: #86efac; --accent-glow: rgba(34,197,94,0.4); }
-:root[data-accent="ember"] { --accent-color: #f97316; --accent-color-light: #fb923c; --accent-color-dim: #c2410c; --accent-secondary: #ef4444; --accent-text: #fdba74; --accent-glow: rgba(249,115,22,0.4); }
-:root[data-accent="ocean"] { --accent-color: #3b82f6; --accent-color-light: #60a5fa; --accent-color-dim: #1d4ed8; --accent-secondary: #14b8a6; --accent-text: #93c5fd; --accent-glow: rgba(59,130,246,0.4); }
-:root[data-accent="royal"] { --accent-color: #8b5cf6; --accent-color-light: #a78bfa; --accent-color-dim: #6d28d9; --accent-secondary: #eab308; --accent-text: #c4b5fd; --accent-glow: rgba(139,92,246,0.4); }
-:root[data-accent="rose"]  { --accent-color: #ec4899; --accent-color-light: #f472b6; --accent-color-dim: #be185d; --accent-secondary: #f43f5e; --accent-text: #f9a8d4; --accent-glow: rgba(236,72,153,0.4); }
-:root[data-accent="mint"]  { --accent-color: #10b981; --accent-color-light: #34d399; --accent-color-dim: #047857; --accent-secondary: #34d399; --accent-text: #6ee7b7; --accent-glow: rgba(16,185,129,0.4); }
-:root[data-accent="aurora"] { --accent-color: #06b6d4; --accent-color-light: #22d3ee; --accent-color-dim: #0891b2; --accent-secondary: #ec4899; --accent-text: #67e8f9; --accent-glow: rgba(6,182,212,0.4); }
-:root[data-accent="sunset"] { --accent-color: #f97316; --accent-color-light: #fb923c; --accent-color-dim: #ea580c; --accent-secondary: #8b5cf6; --accent-text: #fdba74; --accent-glow: rgba(249,115,22,0.4); }
-:root[data-accent="forest"] { --accent-color: #059669; --accent-color-light: #34d399; --accent-color-dim: #047857; --accent-secondary: #65a30d; --accent-text: #6ee7b7; --accent-glow: rgba(5,150,105,0.4); }
-:root[data-accent="frost"]  { --accent-color: #06b6d4; --accent-color-light: #22d3ee; --accent-color-dim: #0891b2; --accent-secondary: #94a3b8; --accent-text: #67e8f9; --accent-glow: rgba(6,182,212,0.4); }
+:root[data-accent="neon"] {
+  --accent-color: #22c55e;
+  --accent-color-light: #4ade80;
+  --accent-color-dim: #166534;
+  --accent-secondary: #a855f7;
+  --accent-text: #86efac;
+  --accent-glow: rgba(34, 197, 94, 0.4);
+}
+
+:root[data-accent="ember"] {
+  --accent-color: #f97316;
+  --accent-color-light: #fb923c;
+  --accent-color-dim: #c2410c;
+  --accent-secondary: #ef4444;
+  --accent-text: #fdba74;
+  --accent-glow: rgba(249, 115, 22, 0.4);
+}
+
+:root[data-accent="ocean"] {
+  --accent-color: #3b82f6;
+  --accent-color-light: #60a5fa;
+  --accent-color-dim: #1d4ed8;
+  --accent-secondary: #14b8a6;
+  --accent-text: #93c5fd;
+  --accent-glow: rgba(59, 130, 246, 0.4);
+}
+
+:root[data-accent="royal"] {
+  --accent-color: #8b5cf6;
+  --accent-color-light: #a78bfa;
+  --accent-color-dim: #6d28d9;
+  --accent-secondary: #eab308;
+  --accent-text: #c4b5fd;
+  --accent-glow: rgba(139, 92, 246, 0.4);
+}
+
+:root[data-accent="rose"] {
+  --accent-color: #ec4899;
+  --accent-color-light: #f472b6;
+  --accent-color-dim: #be185d;
+  --accent-secondary: #f43f5e;
+  --accent-text: #f9a8d4;
+  --accent-glow: rgba(236, 72, 153, 0.4);
+}
+
+:root[data-accent="mint"] {
+  --accent-color: #10b981;
+  --accent-color-light: #34d399;
+  --accent-color-dim: #047857;
+  --accent-secondary: #34d399;
+  --accent-text: #6ee7b7;
+  --accent-glow: rgba(16, 185, 129, 0.4);
+}
+
+:root[data-accent="aurora"] {
+  --accent-color: #06b6d4;
+  --accent-color-light: #22d3ee;
+  --accent-color-dim: #0891b2;
+  --accent-secondary: #ec4899;
+  --accent-text: #67e8f9;
+  --accent-glow: rgba(6, 182, 212, 0.4);
+}
+
+:root[data-accent="sunset"] {
+  --accent-color: #f97316;
+  --accent-color-light: #fb923c;
+  --accent-color-dim: #ea580c;
+  --accent-secondary: #8b5cf6;
+  --accent-text: #fdba74;
+  --accent-glow: rgba(249, 115, 22, 0.4);
+}
+
+:root[data-accent="forest"] {
+  --accent-color: #059669;
+  --accent-color-light: #34d399;
+  --accent-color-dim: #047857;
+  --accent-secondary: #65a30d;
+  --accent-text: #6ee7b7;
+  --accent-glow: rgba(5, 150, 105, 0.4);
+}
+
+:root[data-accent="frost"] {
+  --accent-color: #06b6d4;
+  --accent-color-light: #22d3ee;
+  --accent-color-dim: #0891b2;
+  --accent-secondary: #94a3b8;
+  --accent-text: #67e8f9;
+  --accent-glow: rgba(6, 182, 212, 0.4);
+}
 
 /* ══════════════════════════════════════════════
    Smooth Theme Transitions (mode / palette switches)
@@ -318,8 +476,15 @@ body {
 
 /* Handwritten name — clips in from left, like the SVG stroke animation */
 @keyframes sk-name-reveal {
-  0%   { clip-path: inset(0 100% 0 0); opacity: 0.5; }
-  100% { clip-path: inset(0 0% 0 0);   opacity: 1;   }
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.5;
+  }
+
+  100% {
+    clip-path: inset(0 0% 0 0);
+    opacity: 1;
+  }
 }
 
 /* Hero elements fade up from slight offset */
@@ -328,6 +493,7 @@ body {
     opacity: 0;
     transform: translateY(12px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -336,11 +502,19 @@ body {
 
 /* Nav slide down */
 @keyframes sk-nav-in {
-  0%   { opacity: 0; transform: translateY(-8px); }
-  100% { opacity: 1; transform: translateY(0); }
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
+
   /* Nav fades in first */
   nav {
     animation: sk-nav-in 0.5s ease-out 0s both;
@@ -351,10 +525,12 @@ body {
     opacity: 0;
     animation: sk-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
   .sk-hero-bio {
     opacity: 0;
     animation: sk-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
+
   .sk-hero-socials {
     opacity: 0;
     animation: sk-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -368,7 +544,8 @@ body {
 /* Section heading — Instrument Serif */
 .sk-section-heading {
   font-family: 'Instrument Serif', Georgia, serif;
-  font-size: 1.875rem;   /* text-3xl */
+  font-size: 1.875rem;
+  /* text-3xl */
   line-height: 1.2;
   color: var(--text-color-strong);
 }
@@ -376,7 +553,8 @@ body {
 /* Item title — Instrument Serif, medium size */
 .sk-item-title {
   font-family: 'Instrument Serif', Georgia, serif;
-  font-size: 1.25rem;    /* text-xl */
+  font-size: 1.25rem;
+  /* text-xl */
   line-height: 1.3;
   color: var(--text-color-strong);
 }
