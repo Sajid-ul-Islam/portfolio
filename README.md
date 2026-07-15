@@ -31,7 +31,7 @@ A high-performance, modular portfolio for a **Data & Business Analyst**. This pr
 ## 🛠️ Development & Deployment
 
 ### Quick Start
-1. **Clone**: `git clone https://github.com/Sajid-ul-Islam/Sajid-ul-Islam.github.io.git`
+1. **Clone**: `git clone https://github.com/Sajid-ul-Islam/Sajid-ul-Islam.github.io.git sajid-portfolio`
 2. **Install**: `npm install` (requires Node.js)
 3. **Run**: `npm run dev` (opens Vite dev server)
 
