@@ -12,18 +12,20 @@ export default function ThemePanel({ currentTheme, onThemeChange }) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef(null);
   const { mode, setMode, accent, setAccent, palettes } = useColorTheme();
+  const modeRef = useRef(mode);
+  modeRef.current = mode;
 
   // Initialize ripple theme toggler
   useEffect(() => {
     if (window.initThemeToggleWithRipple) {
       window.initThemeToggleWithRipple({
         buttonId: 'theme-mode-toggle-button',
-        getTheme: () => mode,
+        getTheme: () => modeRef.current,
         applyTheme: (theme) => setMode(theme),
         saveTheme: (theme) => localStorage.setItem('portfolio_mode', theme),
       });
     }
-  }, [mode, setMode]);
+  }, [setMode]);
 
   // Close on click outside
   useEffect(() => {
